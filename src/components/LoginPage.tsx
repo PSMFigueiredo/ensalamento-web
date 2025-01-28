@@ -1,15 +1,16 @@
 import React, {useState} from "react";
-import {useNavigate} from "react-router-dom";
+import {Form as RouterForm, useNavigate} from "react-router-dom";
 import {useAuth} from "../context/AuthContext.tsx";
+import styled from "styled-components";
 
 const LoginPage: React.FC = () => {
     const [username, setusername] = useState("");
     const [password, setpassword] = useState("");
     const [error, setError] = useState("");
     const navigate = useNavigate();
-    const { login } = useAuth();
+    const {login} = useAuth();
 
-    const handleLogin = (e:React.FormEvent<HTMLFormElement>) => {
+    const handleLogin = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         const success = login(username, password);
         if (success) {
@@ -22,77 +23,70 @@ const LoginPage: React.FC = () => {
     };
 
     return (
-        <div style={styles.container}>
-            <h1 style={styles.title}>Login</h1>
-            <form onSubmit={handleLogin} style={styles.form}>
-                <label style={styles.label}>
-                    Usuário:
-                    <input
-                    type="text"
-                    value={username}
-                    onChange={(e) => setusername(e.target.value)}
-                    style={styles.input}
-                    placeholder="Digite seu usuário"
-                    />
-                </label>
-                <label style={styles.label}>
-                    Senha:
-                    <input
-                    type="password"
-                    value={password}
-                    onChange={(e) => setpassword(e.target.value)}
-                    style={styles.input}
-                    placeholder="Digite a sua senha"
-                    />
-                </label>
-                <button type="submit" style={styles.button}>
-                    Entrar
-                </button>
-            </form>
-        </div>
+        <Container>
+            <Card>
+                <Title>Login</Title>
+                <Form onSubmit={handleLogin}>
+                    <Input type="text" placeholder="Usuário" value={username} onChange={(e) => setusername(e.target.value)}/>
+                    <Input type="password" placeholder="Senha" value={password}
+                    onChange={(e) => setpassword(e.target.value)}/>
+                    <Button type="submit">Entrar</Button>
+                </Form>
+            </Card>
+        </Container>
     );
 };
 
-const styles = {
-    container: {
-        maxWidth: "400px",
-        margin: "50px auto",
-        padding: "20px",
-        border: "1px solid #ccc",
-        borderRadius: "8px",
-        backgroundColor: "#fff",
-        boxShadow: "0 4px 6px rgba(0, 0, 0, 0.1)",
-    },
-    title: {
-        textAlign: "center" as const,
-        color: "#333",
-    },
-    form: {
-        display: "flex",
-        flexDirection: "column" as const,
-        gap: "10px",
-    },
-    label: {
-        display: "flex",
-        flexDirection: "column" as const,
-        fontWeight: "bold",
-        color: "#555",
-    },
-    input: {
-        padding: "8px",
-        border: "1px solid #ccc",
-        borderRadius: "4px",
-        fontSize: "14px",
-    },
-    button: {
-        padding: "10px",
-        backgroundColor: "#4CAF50",
-        color: "#fff",
-        border: "none",
-        borderRadius: "4px",
-        cursor: "pointer",
-        fontWeight: "bold",
-    },
-};
+const Container = styled.div`
+display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background-color: #f5f5f5;
+`;
+const Card = styled.div`
+    background: #fff;
+    padding: 30px;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    max-width: 400px;
+`;
+const Title = styled.h1`
+    font-size: 24px;
+    text-align: center;
+    margin-bottom: 20px;
+    color: #333;
+`;
 
-export default LoginPage;
+const Form = styled.form`
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+`;
+
+const Input = styled.input`
+    padding: 10px;
+    font-size: 16px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+`;
+
+const Button = styled.button`
+    padding: 10px 15px;
+    font-size: 16px;
+    color: #fff;
+    background-color: #007bff;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    
+    &:hover {
+        background-color: #0056b3;
+    }
+`
+
+
+
+
+     export default LoginPage;
