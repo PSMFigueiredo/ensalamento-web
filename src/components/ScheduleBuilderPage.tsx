@@ -1,4 +1,5 @@
-import React, {useState} from "react";
+import React, { useState } from "react";
+import Header from "../components/Header.tsx";
 
 interface ScheduleBuilderPage {
     id: number;
@@ -8,7 +9,7 @@ interface ScheduleBuilderPage {
     teacher: string;
 }
 
-const ScheduleBuilderPage: React.FC= () => {
+const ScheduleBuilderPage: React.FC = () => {
     const [selectedClass, setSelectedClass] = useState("");
     const [day, setDay] = useState("");
     const [time, setTime] = useState("");
@@ -43,110 +44,113 @@ const ScheduleBuilderPage: React.FC= () => {
     };
 
     return (
-        <div style={styles.container}>
-            <h1 style={styles.title}>Montagem de Grade Horária</h1>
+        <div>
+            <Header />
+            <div style={styles.container}>
+                <h1 style={styles.title}>Montagem de Grade Horária</h1>
 
-            <form style={styles.form}>
-                <label style={styles.label}>
-                    Turma:
-                    <select
-                        value={selectedClass}
-                        onChange={(e) => setSelectedClass(e.target.value)}
-                        style={styles.select}
-                    >
-                        <option value="">Selecione uma turma</option>
-                        {classes.map((className) => (
-                            <option key={className} value={className}>
-                                {className}
-                            </option>
+                <form style={styles.form}>
+                    <label style={styles.label}>
+                        Turma:
+                        <select
+                            value={selectedClass}
+                            onChange={(e) => setSelectedClass(e.target.value)}
+                            style={styles.select}
+                        >
+                            <option value="">Selecione uma turma</option>
+                            {classes.map((className) => (
+                                <option key={className} value={className}>
+                                    {className}
+                                </option>
+                            ))}
+                        </select>
+                    </label>
+
+                    <label style={styles.label}>
+                        Dia da Semana:
+                        <select
+                            value={day}
+                            onChange={(e) => setDay(e.target.value)}
+                            style={styles.select}
+                        >
+                            <option value="">Selecione um dia</option>
+                            {days.map((dayOption) => (
+                                <option key={dayOption} value={dayOption}>
+                                    {dayOption}
+                                </option>
+                            ))}
+                        </select>
+                    </label>
+
+                    <label style={styles.label}>
+                        Horário:
+                        <input
+                            type="time"
+                            value={time}
+                            onChange={(e) => setTime(e.target.value)}
+                            style={styles.input}
+                        />
+                    </label>
+
+                    <label style={styles.label}>
+                        Disciplina:
+                        <select
+                            value={subject}
+                            onChange={(e) => setSubject(e.target.value)}
+                            style={styles.select}
+                        >
+                            <option value="">Selecione uma disciplina</option>
+                            {subjects.map((subjectOption) => (
+                                <option key={subjectOption} value={subjectOption}>
+                                    {subjectOption}
+                                </option>
+                            ))}
+                        </select>
+                    </label>
+
+                    <label style={styles.label}>
+                        Professor:
+                        <select
+                            value={teacher}
+                            onChange={(e) => setTeacher(e.target.value)}
+                            style={styles.select}
+                        >
+                            <option value="">Selecione um professor</option>
+                            {teachers.map((teacherOption) => (
+                                <option key={teacherOption} value={teacherOption}>
+                                    {teacherOption}
+                                </option>
+                            ))}
+                        </select>
+                    </label>
+
+                    <button type="button" onClick={addScheduleItem} style={styles.button}>
+                        Adicionar à Grade
+                    </button>
+                </form>
+
+                <h2 style={styles.subtitle}>Grade Horária</h2>
+                <table style={styles.table}>
+                    <thead>
+                        <tr>
+                            <th style={styles.th}>Dia</th>
+                            <th style={styles.th}>Horário</th>
+                            <th style={styles.th}>Disciplina</th>
+                            <th style={styles.th}>Professor</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {schedule.map((item) => (
+                            <tr key={item.id}>
+                                <td style={styles.td}>{item.day}</td>
+                                <td style={styles.td}>{item.time}</td>
+                                <td style={styles.td}>{item.subject}</td>
+                                <td style={styles.td}>{item.teacher}</td>
+                            </tr>
                         ))}
-                    </select>
-                </label>
-
-                <label style={styles.label}>
-                    Dia da Semana:
-                    <select
-                        value={day}
-                        onChange={(e) => setDay(e.target.value)}
-                        style={styles.select}
-                    >
-                        <option value="">Selecione um dia</option>
-                        {days.map((dayOption) => (
-                            <option key={dayOption} value={dayOption}>
-                                {dayOption}
-                            </option>
-                        ))}
-                    </select>
-                </label>
-
-                <label style={styles.label}>
-                    Horário:
-                    <input
-                        type="time"
-                        value={time}
-                        onChange={(e) => setTime(e.target.value)}
-                        style={styles.input}
-                    />
-                </label>
-
-                <label style={styles.label}>
-                    Disciplina:
-                    <select
-                        value={subject}
-                        onChange={(e) => setSubject(e.target.value)}
-                        style={styles.select}
-                    >
-                        <option value="">Selecione uma disciplina</option>
-                        {subjects.map((subjectOption) => (
-                            <option key={subjectOption} value={subjectOption}>
-                                {subjectOption}
-                            </option>
-                        ))}
-                    </select>
-                </label>
-
-                <label style={styles.label}>
-                    Professor:
-                    <select
-                        value={teacher}
-                        onChange={(e) => setTeacher(e.target.value)}
-                        style={styles.select}
-                    >
-                        <option value="">Selecione um professor</option>
-                        {teachers.map((teacherOption) => (
-                            <option key={teacherOption} value={teacherOption}>
-                                {teacherOption}
-                            </option>
-                        ))}
-                    </select>
-                </label>
-
-                <button type="button" onClick={addScheduleItem} style={styles.button}>
-                    Adicionar à Grade
-                </button>
-            </form>
-
-            <h2 style={styles.subtitle}>Grade Horária</h2>
-            <table style={styles.table}>
-                <thead>
-                <tr>
-                    <th style={styles.th}>Dia</th>
-                    <th style={styles.th}>Horário</th>
-                    <th style={styles.th}>Disciplina</th>
-                    <th style={styles.th}>Professor</th>
-                </tr>
-                </thead>
-                <tbody>
-                {schedule.map((item) => (
-                    <tr key={item.id}>
-                        <td style={styles.td}>{item.day}</td>
-                        <td style={styles.td}>{item.time}</td>
-                        <td style={styles.td}>{item.subject}</td>
-                        <td style={styles.td}>{item.teacher}</td>
-                    </tr>
-                ))}
-                </tbody>
-            </table>
+                    </tbody>
+                </table>
+            </div>
         </div>
     );
 };
@@ -157,6 +161,7 @@ const styles = {
         maxWidth: "800px",
         margin: "50px auto",
         padding: "20px",
+        marginTop: "280px",
         border: "1px solid #ccc",
         borderRadius: "8px",
         backgroundColor: "#fff",
