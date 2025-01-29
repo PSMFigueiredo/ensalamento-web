@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, {useEffect, useState} from "react";
 import DeleteButton from "./DeleteButton.tsx";
 import EditButton from "./EditButton.tsx";
 import Header from "../components/Header.tsx";
@@ -13,23 +13,25 @@ interface Classroom {
 
 const ClassroomListPage: React.FC = () => {
     //lista ficticia
-    const [classrooms, setClassrooms] = useState<Classroom[]>([
-        {
-            id: 1,
-            name: "3º Ano A",
-            days: ["Segunda-feira", "Quarta-feira", "Sexta-feira"],
-            time: "08:00 - 12:00",
-            shift: "Matutino",
-        },
-        {
-            id: 2,
-            name: "2º Ano B",
-            days: ["Terça-feira", "Quinta-feira"],
-            time: "13:00 - 17:00",
-            shift: "Vespertino",
-        },
-    ]);
-
+    // const [classrooms, setClassrooms] = useState<Classroom[]>([
+    //     {
+    //         id: 1,
+    //         name: "3º Ano A",
+    //         days: ["Segunda-feira", "Quarta-feira", "Sexta-feira"],
+    //         time: "08:00 - 12:00",
+    //         shift: "Matutino",
+    //     },
+    //     {
+    //         id: 2,
+    //         name: "2º Ano B",
+    //         days: ["Terça-feira", "Quinta-feira"],
+    //         time: "13:00 - 17:00",
+    //         shift: "Vespertino",
+    //     },
+    // ]);
+useEffect(() => {
+    api.get("/classrooms/")
+})
 
     const [isEditing, setIsEditing] = useState(false);
     const [currentClassroom, setCurrentClassroom] = useState<Classroom | null>(null);

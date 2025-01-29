@@ -11,16 +11,18 @@ const LoginPage: React.FC = () => {
     const navigate = useNavigate();
     const { login } = useAuth();
 
-    const handleLogin = (e: React.FormEvent<HTMLFormElement>) => {
+    const handleLogin = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
-        const success = login(username, password);
+        const success = await login(username, password);
+        console.log("Sucesso no login:", success)
         if (success) {
+            console.log("Redirecionando para a pagina inicial...")
             navigate("/")
         } else {
+            console.log("Falha no login")
             setError("Credenciais inválidas. Tente novamente.");
         }
 
-        //Aqui entra a logica de autenticacao
     };
 
     return (
