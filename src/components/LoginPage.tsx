@@ -1,6 +1,7 @@
-import React, {useState} from "react";
-import {Form as RouterForm, useNavigate} from "react-router-dom";
-import {useAuth} from "../context/AuthContext.tsx";
+import React, { useState } from "react";
+import { Form as RouterForm, useNavigate } from "react-router-dom";
+import { useAuth } from "../context/AuthContext.tsx";
+import Header from "../components/Header.tsx";
 import styled from "styled-components";
 
 const LoginPage: React.FC = () => {
@@ -8,7 +9,7 @@ const LoginPage: React.FC = () => {
     const [password, setpassword] = useState("");
     const [error, setError] = useState("");
     const navigate = useNavigate();
-    const {login} = useAuth();
+    const { login } = useAuth();
 
     const handleLogin = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
@@ -24,12 +25,13 @@ const LoginPage: React.FC = () => {
 
     return (
         <Container>
+            <Header />
             <Card>
                 <Title>Login</Title>
                 <Form onSubmit={handleLogin}>
-                    <Input type="text" placeholder="Usuário" value={username} onChange={(e) => setusername(e.target.value)}/>
+                    <Input type="text" placeholder="Usuário" value={username} onChange={(e) => setusername(e.target.value)} />
                     <Input type="password" placeholder="Senha" value={password}
-                    onChange={(e) => setpassword(e.target.value)}/>
+                        onChange={(e) => setpassword(e.target.value)} />
                     <Button type="submit">Entrar</Button>
                 </Form>
             </Card>
@@ -76,17 +78,17 @@ const Button = styled.button`
     padding: 10px 15px;
     font-size: 16px;
     color: #fff;
-    background-color: #007bff;
+    background-color: #00509E;
     border: none;
     border-radius: 4px;
     cursor: pointer;
     
     &:hover {
-        background-color: #0056b3;
+        background-color: #007bff;
     }
 `
 
 
 
 
-     export default LoginPage;
+export default LoginPage;

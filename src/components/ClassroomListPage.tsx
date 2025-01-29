@@ -1,6 +1,7 @@
-import React, {useState} from "react";
+import React, { useState } from "react";
 import DeleteButton from "./DeleteButton.tsx";
 import EditButton from "./EditButton.tsx";
+import Header from "../components/Header.tsx";
 
 interface Classroom {
     id: number;
@@ -46,79 +47,82 @@ const ClassroomListPage: React.FC = () => {
 
 
     return (
-        <div style={styles.container}>
-            <h1 style={styles.title}>Lista de Turmas</h1>
-            <table style={styles.table}>
-                <thead>
-                <tr>
-                    <th style={styles.th}>Nome da Turma</th>
-                    <th style={styles.th}>Dias</th>
-                    <th style={styles.th}>Horário</th>
-                    <th style={styles.th}>Turno</th>
-                    <th style={styles.th}>Ações</th>
-                </tr>
-                </thead>
-                <tbody>
-                {classrooms.map((classroom) => (
-                    <tr key={classroom.id}>
-                        <td style={styles.td}>{classroom.name}</td>
-                        <td style={styles.td}>{classroom.days.join(", ")}</td>
-                        <td style={styles.td}>{classroom.time}</td>
-                        <td style={styles.td}>{classroom.shift}</td>
-                        <td style={styles.td}>
-                            <EditButton onEdit={() => handleEdit(classroom)}/>
+        <div>
+            <Header />
+            <div style={styles.container}>
+                <h1 style={styles.title}>Lista de Turmas</h1>
+                <table style={styles.table}>
+                    <thead>
+                        <tr>
+                            <th style={styles.th}>Nome da Turma</th>
+                            <th style={styles.th}>Dias</th>
+                            <th style={styles.th}>Horário</th>
+                            <th style={styles.th}>Turno</th>
+                            <th style={styles.th}>Ações</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {classrooms.map((classroom) => (
+                            <tr key={classroom.id}>
+                                <td style={styles.td}>{classroom.name}</td>
+                                <td style={styles.td}>{classroom.days.join(", ")}</td>
+                                <td style={styles.td}>{classroom.time}</td>
+                                <td style={styles.td}>{classroom.shift}</td>
+                                <td style={styles.td}>
+                                    <EditButton onEdit={() => handleEdit(classroom)} />
 
-                            <DeleteButton onDelete={() => handleDelete(classroom.id)} />
-                        </td>
-                    </tr>
-                ))}
-                </tbody>
-            </table>
-            {isEditing && currentClassroom && (
-                <div style={styles.modal}>
-                    <h2>Editar Turma</h2>
-                    <form
-                        onSubmit={(e) => {
-                            e.preventDefault();
-                            setClassrooms((prevClassrooms) =>
-                                prevClassrooms.map((c) =>
-                                    c.id === currentClassroom.id ? currentClassroom : c
-                                )
-                            );
-                            setIsEditing(false);
-                        }}
-                    >
-                        <label>
-                            Nome:
-                            <input
-                                type="text"
-                                value={currentClassroom.name}
-                                onChange={(e) =>
-                                    setCurrentClassroom({ ...currentClassroom, name: e.target.value })
-                                }
-                            />
-                        </label>
-                        <label>
-                            Dias:
-                            <input
-                                type="text"
-                                value={currentClassroom.days.join(",") || ""}
-                                onChange={(e) =>
-                                    setCurrentClassroom({
-                                        ...currentClassroom,
-                                        days: e.target.value.split(",").map((d) => d.trim()),
-                                    })
-                                }
-                            />
-                        </label>
-                        <button type="submit">Salvar</button>
-                        <button type="button" onClick={() => setIsEditing(false)}>
-                            Cancelar
-                        </button>
-                    </form>
-                </div>
-            )}
+                                    <DeleteButton onDelete={() => handleDelete(classroom.id)} />
+                                </td>
+                            </tr>
+                        ))}
+                    </tbody>
+                </table>
+                {isEditing && currentClassroom && (
+                    <div style={styles.modal}>
+                        <h2>Editar Turma</h2>
+                        <form
+                            onSubmit={(e) => {
+                                e.preventDefault();
+                                setClassrooms((prevClassrooms) =>
+                                    prevClassrooms.map((c) =>
+                                        c.id === currentClassroom.id ? currentClassroom : c
+                                    )
+                                );
+                                setIsEditing(false);
+                            }}
+                        >
+                            <label>
+                                Nome:
+                                <input
+                                    type="text"
+                                    value={currentClassroom.name}
+                                    onChange={(e) =>
+                                        setCurrentClassroom({ ...currentClassroom, name: e.target.value })
+                                    }
+                                />
+                            </label>
+                            <label>
+                                Dias:
+                                <input
+                                    type="text"
+                                    value={currentClassroom.days.join(",") || ""}
+                                    onChange={(e) =>
+                                        setCurrentClassroom({
+                                            ...currentClassroom,
+                                            days: e.target.value.split(",").map((d) => d.trim()),
+                                        })
+                                    }
+                                />
+                            </label>
+                            <button type="submit">Salvar</button>
+                            <button type="button" onClick={() => setIsEditing(false)}>
+                                Cancelar
+                            </button>
+                        </form>
+                    </div>
+                )}
 
+            </div>
         </div>
     );
 };
@@ -132,6 +136,7 @@ const styles = {
         border: "1px solid #ccc",
         borderRadius: "8px",
         backgroundColor: "#fff",
+        marginTop: "280px",
         boxShadow: "0 4px 6px rgba(0, 0, 0, 0.1)",
     },
     title: {

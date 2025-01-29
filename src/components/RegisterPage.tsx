@@ -1,4 +1,5 @@
-import React, {useState} from "react";
+import React, { useState } from "react";
+import Header from "../components/Header.tsx";
 
 const RegisterPage: React.FC = () => {
     const [username, setUsername] = useState("");
@@ -15,58 +16,61 @@ const RegisterPage: React.FC = () => {
 
         //logica de envio para o backend
     };
-    return(
-        <div style={styles.container}>
-            <h1 style={styles.title}>Cadastro de Usuário</h1>
-            <form onSubmit={handleRegister} style={styles.form}>
-                <label style={styles.label}>
-                    Nome de Usuário:
-                    <input
-                        type="text"
-                        value={username}
-                        onChange={(e) => setUsername(e.target.value)}
-                        style={styles.input}
-                        placeholder="Digite seu nome de usuário"
-                        required
-                    />
-                </label>
-                <label style={styles.label}>
-                    Email:
-                    <input
-                        type="email"
-                        value={email}
-                        onChange={(e) => setEmail(e.target.value)}
-                        style={styles.input}
-                        placeholder="Digite seu email"
-                        required
-                    />
-                </label>
-                <label style={styles.label}>
-                    Senha:
-                    <input
-                        type="password"
-                        value={password}
-                        onChange={(e) => setPassword(e.target.value)}
-                        style={styles.input}
-                        placeholder="Digite sua senha"
-                        required
-                    />
-                </label>
-                <label style={styles.label}>
-                    Perfil:
-                    <select
-                        value={profile}
-                        onChange={(e) => setProfile(e.target.value)}
-                        style={styles.select}
-                    >
-                        <option value="professor">Professor</option>
-                        <option value="coordenador">Coordenador/Diretor</option>
-                    </select>
-                </label>
-                <button type="submit" style={styles.button}>
-                    Cadastrar
-                </button>
-            </form>
+    return (
+        <div>
+            <Header />
+            <div style={styles.container}>
+                <h1 style={styles.title}>Cadastro de Usuário</h1>
+                <form onSubmit={handleRegister} style={styles.form}>
+                    <label style={styles.label}>
+                        Nome de Usuário:
+                        <input
+                            type="text"
+                            value={username}
+                            onChange={(e) => setUsername(e.target.value)}
+                            style={styles.input}
+                            placeholder="Digite seu nome de usuário"
+                            required
+                        />
+                    </label>
+                    <label style={styles.label}>
+                        Email:
+                        <input
+                            type="email"
+                            value={email}
+                            onChange={(e) => setEmail(e.target.value)}
+                            style={styles.input}
+                            placeholder="Digite seu email"
+                            required
+                        />
+                    </label>
+                    <label style={styles.label}>
+                        Senha:
+                        <input
+                            type="password"
+                            value={password}
+                            onChange={(e) => setPassword(e.target.value)}
+                            style={styles.input}
+                            placeholder="Digite sua senha"
+                            required
+                        />
+                    </label>
+                    <label style={styles.label}>
+                        Perfil:
+                        <select
+                            value={profile}
+                            onChange={(e) => setProfile(e.target.value)}
+                            style={styles.select}
+                        >
+                            <option value="professor">Professor</option>
+                            <option value="coordenador">Coordenador/Diretor</option>
+                        </select>
+                    </label>
+                    <button type="submit" style={styles.button}>
+                        Cadastrar
+                    </button>
+                </form>
+            </div>
         </div>
     );
 };
@@ -77,6 +81,8 @@ const styles = {
         maxWidth: "400px",
         margin: "50px auto",
         padding: "20px",
+        marginTop: "300px",
+        paddingTop: "20px",
         border: "1px solid #ccc",
         borderRadius: "8px",
         backgroundColor: "#fff",
