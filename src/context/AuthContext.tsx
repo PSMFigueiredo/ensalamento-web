@@ -1,54 +1,51 @@
-import React, {createContext, useContext, useState} from "react";
-
+import React, { createContext, useContext, useEffect, useState } from "react";
+import api from "../services/api";
 
 interface AuthContextType {
     isAuthenticated: boolean;
-    login: (username: string, password: string) => boolean;
+    login: (email: string, senha: string) => Promise<boolean>;
     logout: () => void;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
-export const AuthProvider: React.FC<{children: React.ReactNode}> = ({ children }) => {
-    const [isAuthenticated, setIsAuthenticated] = useState(
-        Boolean(localStorage.getItem("token"))
-    );
+export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+    const [isAuthenticated, setIsAuthenticated] = useState(false);
 
-    const login = async (username: string, password: string): Promise<boolean> => {
+
+    useEffect(() => {
+        const token = localStorage.getItem("token");
+        if (token) {
+            setIsAuthenticated(true);
+        }
+    }, []);
+
+
+    const login = async (email: string, senha: string): Promise<boolean> => {
         try {
-            const response = await fetch("http://localhost:3000/usuarios/login", {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                },
-                body: JSON.stringify({ email: username, senha: password }),
-            });
+            const response = await api.post("/usuarios/login", { email, senha });
 
-            if (!response.ok) {
-                console.error("Erro ao autenticar");
-                return false;
-            }
-
-            const data = await response.json();
-            if (data.token) {
-                localStorage.setItem("token", data.token);
+            if (response.status === 200) {
+                const { token } = response.data;
+                localStorage.setItem("token", token);
                 setIsAuthenticated(true);
                 return true;
             }
         } catch (error) {
-            console.error("Erro na requisição:", error);
+            console.error("Erro ao autenticar:", error);
         }
 
         return false;
     };
 
+
     const logout = () => {
-        setIsAuthenticated(false);
         localStorage.removeItem("token");
+        setIsAuthenticated(false);
     };
 
     return (
-        <AuthContext.Provider value={{isAuthenticated, login, logout}}>
+        <AuthContext.Provider value={{ isAuthenticated, login, logout }}>
             {children}
         </AuthContext.Provider>
     );
@@ -60,4 +57,4 @@ export const useAuth = (): AuthContextType => {
         throw new Error("useAuth deve ser usado dentro de um AuthProvider");
     }
     return context;
-}
+};

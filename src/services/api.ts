@@ -1,10 +1,9 @@
-import * as axios from "axios";
-import {Simulate} from "react-dom/test-utils";
-import error = Simulate.error;
+import axios from "axios";
 
-const api = axios.create ({
-    baseURL: "//localhost:3000",
+const api = axios.create({
+    baseURL: "http://localhost:3000",
 });
+
 
 api.interceptors.request.use(
     (config) => {
@@ -12,9 +11,9 @@ api.interceptors.request.use(
         if (token) {
             config.headers.Authorization = `Bearer ${token}`;
         }
-        return config
+        return config;
     },
     (error) => Promise.reject(error)
 );
 
-export default api
+export default api;

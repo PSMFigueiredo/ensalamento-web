@@ -1,10 +1,21 @@
+import api from "./api";
+
+
 export const login = async (email: string, senha: string) => {
     try {
         const response = await api.post("/usuarios/login", { email, senha });
+        console.log("Resposta do backend:", response.data);
+
         const { token } = response.data;
+        if (!token){
+            console.error("Erro: Token nao foi retornado pelo backend!")
+            return {success: false, message: "Token Invalido"};
+        }
         localStorage.setItem("token", token);
+        console.log("Token salvo no localStorage:", localStorage.getItem("token"))
         return {success: true};
     } catch (error: any) {
+        console.error("Erro na requisicao:" error);
         return { success: false, message: error.response?.data?.message || "Erro ao fazer login" };
     }
 };
