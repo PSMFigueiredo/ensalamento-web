@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import styled from "styled-components";
+import { useAuth } from "../context/AuthContext.tsx";
 import { useLocation } from "react-router-dom";
 import { Link } from "react-router-dom";
 import logoImg from "../assets/logo.png";
@@ -7,6 +8,7 @@ import logoImg from "../assets/logo.png";
 const Header: React.FC = () => {
     const location = useLocation();
     const [loginText, setLoginText] = useState("Login");
+    const {isAuthenticated}  = useAuth();
     const [isLoginPage, setIsLoginPage] = useState(false);
 
     useEffect(() => {
@@ -34,10 +36,12 @@ const Header: React.FC = () => {
                     <div className="bar"></div>
                 </HamburgerMenu>
             )}
-            <RightLinks>
-                <ForgotPassword href="/forgot-password">Esqueci a senha</ForgotPassword>
-                <Register href="/register">Cadastrar</Register>
-            </RightLinks>
+            { !isAuthenticated && (
+                <RightLinks>
+                    <ForgotPassword href="/forgot-password">Esqueci a senha</ForgotPassword>
+                    <Register href="/register">Cadastrar</Register>
+                </RightLinks>
+            )}
         </HeaderContainer>
     );
 };

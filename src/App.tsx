@@ -1,7 +1,7 @@
 import * as React from "react";
 import {BrowserRouter as Router, Routes, Route, Navigate} from "react-router-dom";
 import LoginPage from "./components/LoginPage.tsx";
-import RegisterPage from "./components/RegisterPage.tsx";
+import RegisterPage from "./Pages/RegisterPage.tsx";
 import ClassroomRegisterPage from "./components/ClassroomRegisterPage.tsx";
 import ClassroomListPage from "./components/ClassroomListPage.tsx";
 import TeacherListPage from "./components/TeacherListPage.tsx";

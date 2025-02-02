@@ -5,7 +5,7 @@ import Header from "../components/Header.tsx";
 import styled from "styled-components";
 
 const LoginPage: React.FC = () => {
-    const [username, setusername] = useState("");
+    const [email, setEmail] = useState("");
     const [password, setpassword] = useState("");
     const [error, setError] = useState("");
     const navigate = useNavigate();
@@ -13,7 +13,7 @@ const LoginPage: React.FC = () => {
 
     const handleLogin = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
-        const success = await login(username, password);
+        const success = await login(email, password);
         console.log("Sucesso no login:", success)
         if (success) {
             console.log("Redirecionando para a pagina inicial...")
@@ -31,7 +31,7 @@ const LoginPage: React.FC = () => {
             <Card>
                 <Title>Login</Title>
                 <Form onSubmit={handleLogin}>
-                    <Input type="text" placeholder="Usuário" value={username} onChange={(e) => setusername(e.target.value)} />
+                    <Input type="text" placeholder="E-mail" value={email} onChange={(e) => setEmail(e.target.value)} />
                     <Input type="password" placeholder="Senha" value={password}
                         onChange={(e) => setpassword(e.target.value)} />
                     <Button type="submit">Entrar</Button>

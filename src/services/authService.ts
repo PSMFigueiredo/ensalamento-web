@@ -15,7 +15,7 @@ export const login = async (email: string, senha: string) => {
         console.log("Token salvo no localStorage:", localStorage.getItem("token"))
         return {success: true};
     } catch (error: any) {
-        console.error("Erro na requisicao:" error);
+        console.error("Erro na requisicao:", error);
         return { success: false, message: error.response?.data?.message || "Erro ao fazer login" };
     }
 };
