@@ -1,12 +1,15 @@
 import api from "./api";
 
 
+
 export const login = async (email: string, senha: string) => {
     try {
         const response = await api.post("/usuarios/login", { email, senha });
-        console.log("Resposta do backend:", response.data);
+        console.log("Resposta completa do backend:", response); // 🔍 Adicione esse log
+        console.log("Dados recebidos:", response.data); // 🔍 Verifique o que realmente está vindo
 
-        const { token } = response.data;
+
+        const token = response.data?.token || response.data?.data?.token;
         if (!token){
             console.error("Erro: Token nao foi retornado pelo backend!")
             return {success: false, message: "Token Invalido"};

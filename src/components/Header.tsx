@@ -78,10 +78,6 @@ const Header: React.FC = () => {
                     <Register href="#" onClick={() => navigate("/register")}>|&nbsp;&nbsp;&nbsp;&nbsp;Cadastrar Usuário</Register>
                 </RightLinks>
             )}
-                <Register href="#" onClick={() => navigate("/register")} style={{ position: 'absolute', bottom: '30px', right: '80px' }}>
-                    Cadastrar Usuário
-                </Register>
-
             </HeaderContainer>
         </>
     );

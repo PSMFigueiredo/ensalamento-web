@@ -4,7 +4,7 @@ import api from "../services/api.ts";
 
 const ProfessorRegister: React.FC = () => {
     const [name, setName] = useState("");
-    const [registration, setRegistration] = useState("");
+    const [matricula , setMatricula] = useState("");
     const [cargaHoraria, setCargaHoraria] = useState("");
     const [error, setError] = useState("");
     const [success, setSuccess] = useState(false);
@@ -17,7 +17,7 @@ const ProfessorRegister: React.FC = () => {
        try  {
            const response = await api.post("/professors", {
                nome: name,
-               matricula: registration,
+               matricula: matricula,
                cargaHoraria: Number (cargaHoraria),
            });
 
@@ -43,8 +43,8 @@ const ProfessorRegister: React.FC = () => {
                     <Input
                         type="text"
                         placeholder="Matrícula"
-                        value={registration}
-                        onChange={(e) => setRegistration(e.target.value)}
+                        value={matricula}
+                        onChange={(e) => setMatricula(e.target.value)}
                     />
                     <Input
                         type="number"

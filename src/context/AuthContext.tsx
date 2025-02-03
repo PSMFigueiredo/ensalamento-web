@@ -1,5 +1,8 @@
 import React, { createContext, useContext, useEffect, useState } from "react";
-import api from "../services/api";
+import { login as authLogin } from "../services/authService";
+import { logout as authLogout } from "../services/authService";
+
+
 
 interface AuthContextType {
     isAuthenticated: boolean;
@@ -10,7 +13,7 @@ interface AuthContextType {
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-    const [isAuthenticated, setIsAuthenticated] = useState(false);
+    const [isAuthenticated, setIsAuthenticated] = useState(() => !!localStorage.getItem("token"));
 
 
     useEffect(() => {
@@ -23,11 +26,10 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
     const login = async (email: string, senha: string): Promise<boolean> => {
         try {
-            const response = await api.post("/usuarios/login", { email, senha });
+            const response = await authLogin(email, senha); // Usando a função do authService.ts
 
-            if (response.status === 200) {
-                const { token } = response.data;
-                localStorage.setItem("token", token);
+            if (response.success) {
+                console.log("Token salvo no localStorage:", localStorage.getItem("token"));
                 setIsAuthenticated(true);
                 return true;
             }
@@ -57,4 +59,9 @@ export const useAuth = (): AuthContextType => {
         throw new Error("useAuth deve ser usado dentro de um AuthProvider");
     }
     return context;
+};
+
+const logout = () => {
+    authLogout();
+    setIsAuthenticated(false);
 };

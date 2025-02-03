@@ -11,6 +11,8 @@ const LoginPage: React.FC = () => {
     const navigate = useNavigate();
     const { login } = useAuth();
 
+    console.log("AuthContext:", useAuth());
+
     const handleLogin = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         const success = await login(email, password);
