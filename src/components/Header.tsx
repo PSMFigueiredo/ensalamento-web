@@ -73,13 +73,11 @@ const Header: React.FC = () => {
                     </>
                 )}
                 {!isAuthenticated && (
-                    { !isAuthenticated && (
                 <RightLinks>
                     <ForgotPassword href="/forgot-password">Esqueci a senha</ForgotPassword>
                     <Register href="#" onClick={() => navigate("/register")}>|&nbsp;&nbsp;&nbsp;&nbsp;Cadastrar Usuário</Register>
                 </RightLinks>
             )}
-                )}
                 <Register href="#" onClick={() => navigate("/register")} style={{ position: 'absolute', bottom: '30px', right: '80px' }}>
                     Cadastrar Usuário
                 </Register>
