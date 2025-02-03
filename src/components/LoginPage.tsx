@@ -44,6 +44,7 @@ display: flex;
     justify-content: center;
     align-items: center;
     height: 100vh;
+    margin-top: 80px;
     background-color: #f5f5f5;
 `;
 const Card = styled.div`

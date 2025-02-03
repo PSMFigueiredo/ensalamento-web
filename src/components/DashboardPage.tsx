@@ -34,14 +34,14 @@ const DashboardPage: React.FC = () => {
                         <img src={icon2B} alt="Icon 2B" style={styles.iconBottom} />
                     </div>
 
-                    <div style={styles.card} onClick={() => navigate("/schedule-builder")}>
+                    <div style={styles.card} onClick={() => navigate("/grid")}>
                         <img src={seta} alt="Icon 3" style={styles.iconTop} />
                         <h2 style={styles.cardTitle}>Cadastrar Grade</h2>
                         <p style={styles.cardText}>Monte a grade horária para as turmas.</p>
                         <img src={icon3B} alt="Icon 3B" style={styles.iconBottom} />
                     </div>
 
-                    <div style={styles.card} onClick={() => navigate("/register")}>
+                    <div style={styles.card} onClick={() => navigate("/listpage")}>
                         <img src={seta} alt="Icon 4" style={styles.iconTop} />
                         <h2 style={styles.cardTitle}>Visão Geral</h2>
                         <p style={styles.cardText}>Cadastre um novo usuário no sistema.</p>
@@ -58,7 +58,6 @@ const styles = {
         maxWidth: "900px",
         margin: "50px auto",
         padding: "20px",
-        paddingTop: "210px",
         textAlign: "center" as const,
     },
     title: {

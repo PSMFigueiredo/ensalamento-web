@@ -20,7 +20,7 @@ const ScheduleBuilderPage: React.FC = () => {
     //Lista de exemplo ate conectar o backend
     const classes = ["3º Ano A", "2º Ano B", "1º Ano C"];
     const days = ["Segunda-feira", "Terça-feira", "Quarta-feira", "Quinta-feira", "Sexta-feira"];
-    const subjects = ["Matemática", "Física", "Química", "Biologia"];
+    const subjects = ["Diurno", "Física", "Química", "Biologia"];
     const teachers = ["João Silva", "Maria Oliveira", "Carlos Santos"];
 
     const addScheduleItem = () => {
@@ -161,7 +161,7 @@ const styles = {
         maxWidth: "800px",
         margin: "50px auto",
         padding: "20px",
-        marginTop: "280px",
+        marginTop: "40px",
         border: "1px solid #ccc",
         borderRadius: "8px",
         backgroundColor: "#fff",
