@@ -8,6 +8,7 @@ import TeacherListPage from "./components/TeacherListPage.tsx";
 import ScheduleBuilderPage from "./components/ScheduleBuilderPage.tsx";
 import DashboardPage from "./components/DashboardPage.tsx";
 import {AuthProvider, useAuth} from "./context/AuthContext.tsx";
+import RegisterProfessor from "./Pages/RegisterProfessor.tsx";
 
 
 const ProtectedRoute: React.FC<{ children: React.ReactNode }> = ({ children }) => {
@@ -30,6 +31,7 @@ const App: React.FC = () => {
                 <Route path="/schedule-builder" element={<ProtectedRoute><ScheduleBuilderPage /></ProtectedRoute>}/>
                 <Route path="/teachers" element={<ProtectedRoute><TeacherListPage /> </ProtectedRoute> } />
                 <Route path="/classrooms" element={<ProtectedRoute><ClassroomListPage /> </ProtectedRoute> }/>
+                <Route path="/registerProfessor" element={<ProtectedRoute><RegisterProfessor /> </ProtectedRoute> }/>
                 <Route path="/classroom-register" element={<ProtectedRoute><ClassroomRegisterPage /> </ProtectedRoute>} />
                 <Route path="/register" element={<ProtectedRoute><RegisterPage /> </ProtectedRoute>} />
             </Routes>

@@ -20,7 +20,7 @@ const DashboardPage: React.FC = () => {
                 {/* <button onClick={logout} style={styles.button}>Sair</button> */}
 
                 <div style={styles.cardContainer}>
-                    <div style={styles.card} onClick={() => navigate("/classrooms")}>
+                    <div style={styles.card} onClick={() => navigate("/RegisterProfessor")}>
                         <img src={seta} alt="Icon 1" style={styles.iconTop} />
                         <h2 style={styles.cardTitle}>Cadastrar Professor</h2>
                         <p style={styles.cardText}>Veja todas as turmas cadastradas e suas informações.</p>
