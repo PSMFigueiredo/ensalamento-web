@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import Header from "../components/Header.tsx";
-import {useNavigate} from "react-router-dom";
-import {register} from "../services/authService.ts";
+import { useNavigate } from "react-router-dom";
+import { register } from "../services/authService.ts";
 import styled from "styled-components";
 
 const RegisterPage: React.FC = () => {
@@ -22,7 +22,7 @@ const RegisterPage: React.FC = () => {
         console.log("Senha:", password);
 
         const response = await register(name, email, password);
-        if (response.success){
+        if (response.success) {
             setSuccess(true);
             setTimeout(() => navigate("/login"), 2000)
         } else {
@@ -32,44 +32,46 @@ const RegisterPage: React.FC = () => {
 
     return (
 
-    <Container>
-        <Header />
-        <Card>
-            <Title>Cadastro</Title>
-            <Form onSubmit={handleRegister}>
-                <Input
-                    type="text"
-                    placeholder="Nome"
-                    value={name}
-                    onChange={(e) => setName(e.target.value)}
-                />
-                <Input
-                    type="email"
-                    placeholder="E-mail"
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                />
-                <Input
-                    type="password"
-                    placeholder="Senha"
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
-                />
-                {error && <ErrorMessage>{error}</ErrorMessage>}
-                {success && <SuccessMessage>Cadastro realizado com sucesso! Redirecionando...</SuccessMessage>}
-                <Button type="submit">Cadastrar</Button>
-            </Form>
-        </Card>
-    </Container>
-);
+        <Container>
+            <Header />
+            <Card>
+                <Title>Cadastro</Title>
+                <Form onSubmit={handleRegister}>
+                    <Input
+                        type="text"
+                        placeholder="Nome"
+                        value={name}
+                        onChange={(e) => setName(e.target.value)}
+                    />
+                    <Input
+                        type="email"
+                        placeholder="E-mail"
+                        value={email}
+                        onChange={(e) => setEmail(e.target.value)}
+                    />
+                    <Input
+                        type="password"
+                        placeholder="Senha"
+                        value={password}
+                        onChange={(e) => setPassword(e.target.value)}
+                    />
+                    {error && <ErrorMessage>{error}</ErrorMessage>}
+                    {success && <SuccessMessage>Cadastro realizado com sucesso! Redirecionando...</SuccessMessage>}
+                    <Button type="submit">Cadastrar</Button>
+                </Form>
+            </Card>
+        </Container>
+    );
 };
 
 const Container = styled.div`
     display: flex;
     justify-content: center;
-    align-items: center;
-    height: 100vh;
+    align-items: flex-start;  /* Alinha o conteúdo ao topo */
     background-color: #f5f5f5;
+    width: 100%;
+    min-height: calc(100vh - 230px);  /* Garante que o conteúdo ocupe o restante da tela */
+    padding: 0 20px;  /* Adiciona algum espaçamento nas laterais */
 `;
 
 const Card = styled.div`
@@ -79,6 +81,7 @@ const Card = styled.div`
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
     width: 100%;
     max-width: 400px;
+    margin-top: 280px;
 `;
 
 const Title = styled.h1`
