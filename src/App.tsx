@@ -9,7 +9,8 @@ import DashboardPage from "./components/DashboardPage.tsx";
 import ListPage from "./components/ListPage.tsx";
 import { AuthProvider, useAuth } from "./context/AuthContext.tsx";
 import RegisterProfessor from "./Pages/RegisterProfessor.tsx";
-import DisponibilidadeProfessor from "./Pages/DisponibilidadeProfessor.tsx";
+import SubjectPage from "./Pages/SubjectPage.tsx";
+import AvailablePage from "./Pages/AvailablePage.tsx";
 
 
 
@@ -33,9 +34,10 @@ const App: React.FC = () => {
                     <Route path="/grid" element={<ProtectedRoute><GridRegistrationPage /></ProtectedRoute>} />
                     <Route path="/teachers" element={<ProtectedRoute><ClassRegistrationPage /> </ProtectedRoute>} />
                     <Route path="/classroom-register" element={<ProtectedRoute><ClassroomRegisterPage /> </ProtectedRoute>} />
-                    <Route path="/registerProfessor" element={<ProtectedRoute><RegisterProfessor /> </ProtectedRoute> }/>
-                    <Route path="/disponibilidades-professores" element={<ProtectedRoute><DisponibilidadeProfessor /> </ProtectedRoute> }/>
-                <Route path="/register" element={<ProtectedRoute><RegisterPage /> </ProtectedRoute>} />
+                    <Route path="/registerProfessor" element={<ProtectedRoute><RegisterProfessor /> </ProtectedRoute>} />
+                    <Route path="/register" element={<ProtectedRoute><RegisterPage /> </ProtectedRoute>} />
+                    <Route path="/subject" element={<ProtectedRoute><SubjectPage /> </ProtectedRoute>} />
+                    <Route path="/available" element={<ProtectedRoute><AvailablePage /> </ProtectedRoute>} />
                     <Route path="/listpage" element={<ProtectedRoute><ListPage /> </ProtectedRoute>} />
                 </Routes>
             </Router>

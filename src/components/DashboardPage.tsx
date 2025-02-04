@@ -7,6 +7,8 @@ import icon1B from "../assets/icon1B.png";
 import icon2B from "../assets/icon2B.png";
 import icon3B from "../assets/icon3B.png";
 import icon4B from "../assets/icon4B.png";
+import icon5B from "../assets/icon5B.png";
+import icon6B from "../assets/icon6B.png";
 
 const DashboardPage: React.FC = () => {
     // const { logout } = useAuth();
@@ -22,28 +24,42 @@ const DashboardPage: React.FC = () => {
                 <div style={styles.cardContainer}>
                     <div style={styles.card} onClick={() => navigate("/RegisterProfessor")}>
                         <img src={seta} alt="Icon 1" style={styles.iconTop} />
-                        <h2 style={styles.cardTitle}>Cadastrar Professor</h2>
-                        <p style={styles.cardText}>Veja todas as turmas cadastradas e suas informações.</p>
+                        <h2 style={styles.cardTitle}>Professor</h2>
+                        <p style={styles.cardText}>Cadastre um novo professor no sistema.</p>
                         <img src={icon1B} alt="Icon 1B" style={styles.iconBottom} />
                     </div>
 
                     <div style={styles.card} onClick={() => navigate("/teachers")}>
                         <img src={seta} alt="Icon 2" style={styles.iconTop} />
-                        <h2 style={styles.cardTitle}>Cadastrar Turma</h2>
-                        <p style={styles.cardText}>Veja todos os professores cadastrados e suas disciplinas.</p>
+                        <h2 style={styles.cardTitle}>Turma</h2>
+                        <p style={styles.cardText}>Cadastre uma nova turma no sistema.</p>
                         <img src={icon2B} alt="Icon 2B" style={styles.iconBottom} />
                     </div>
 
                     <div style={styles.card} onClick={() => navigate("/grid")}>
                         <img src={seta} alt="Icon 3" style={styles.iconTop} />
-                        <h2 style={styles.cardTitle}>Cadastrar Grade</h2>
+                        <h2 style={styles.cardTitle}>Grade</h2>
                         <p style={styles.cardText}>Monte a grade horária para as turmas.</p>
                         <img src={icon3B} alt="Icon 3B" style={styles.iconBottom} />
                     </div>
 
+                    <div style={styles.card} onClick={() => navigate("/subject")}>
+                        <img src={seta} alt="Icon 5" style={styles.iconTop} />
+                        <h2 style={styles.cardTitle}>Disciplinas</h2>
+                        <p style={styles.cardText}>Atribua as disciplinas ao professor selecionado.</p>
+                        <img src={icon5B} alt="Icon 5B" style={styles.iconBottom} />
+                    </div>
+
+                    <div style={styles.card} onClick={() => navigate("/available")}>
+                        <img src={seta} alt="Icon 6" style={styles.iconTop} />
+                        <h2 style={styles.cardTitle}>Disponibilidades</h2>
+                        <p style={styles.cardText}>Cadastre / Edite a Disponibilidade dos Professores no Sistema.</p>
+                        <img src={icon6B} alt="Icon 6B" style={styles.iconBottom} />
+                    </div>
+
                     <div style={styles.card} onClick={() => navigate("/listpage")}>
                         <img src={seta} alt="Icon 4" style={styles.iconTop} />
-                        <h2 style={styles.cardTitle}>Visão Geral</h2>
+                        <h2 style={styles.cardTitle}>Geral</h2>
                         <p style={styles.cardText}>Cadastre um novo usuário no sistema.</p>
                         <img src={icon4B} alt="Icon 4B" style={styles.iconBottom} />
                     </div>
@@ -90,12 +106,12 @@ const styles = {
     cardTitle: {
         fontSize: "1.5rem",
         color: "#8F9BB3",
-        marginTop: "15px",
+        marginTop: "0px",
     },
     cardText: {
         fontSize: "1rem",
         color: "#555",
-        marginTop: "10px",
+        marginTop: "0px",
     },
     cardHover: {
         transform: "scale(1.05)",
@@ -116,7 +132,6 @@ const styles = {
     iconBottom: {
         width: "40px",
         height: "40px",
-        marginTop: "15px",
     },
 };
 
