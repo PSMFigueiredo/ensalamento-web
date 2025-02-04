@@ -58,7 +58,7 @@ const Header: React.FC = () => {
                         <LoginLink href="/login">{loginText}</LoginLink>
                         <RightLinks>
                             <ForgotPassword href="/forgot-password">Esqueci a senha</ForgotPassword>
-                            <Register onClick={() => handleNavigate("/register")}>|&nbsp;&nbsp;&nbsp;&nbsp;Cadastrar Usuário</Register>
+                            <Register href="#" onClick={() => navigate("/register-user")}>|&nbsp;&nbsp;&nbsp;&nbsp;Cadastrar Usuário</Register>
                         </RightLinks>
                     </>
                 ) : (
@@ -78,12 +78,6 @@ const Header: React.FC = () => {
                             </HamburgerMenuOptions>
                         )}
                     </>
-                )}
-                {!authStatus && (
-                    <RightLinks>
-                        <ForgotPassword href="/forgot-password">Esqueci a senha</ForgotPassword>
-                        <Register href="#" onClick={() => navigate("/register")}>|&nbsp;&nbsp;&nbsp;&nbsp;Cadastrar Usuário</Register>
-                    </RightLinks>
                 )}
             </HeaderContainer>
         </>

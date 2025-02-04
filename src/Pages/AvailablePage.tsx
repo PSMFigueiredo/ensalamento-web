@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import api from "../services/api";
 import styled from "styled-components";
+import Header from "../components/Header";
 
 const DisponibilidadeProfessor: React.FC = () => {
     const [professors, setProfessors] = useState([]);
@@ -35,7 +36,7 @@ const DisponibilidadeProfessor: React.FC = () => {
         console.log("Enviando dados:", data);
 
         try {
-            const response = await api.post("/disponibilidades-professores", data);
+            const response = await api.post("/available", data);
             if (response.status === 201) {
                 setMessage("Disponibilidade cadastrada com sucesso!");
                 console.log(data)
@@ -50,6 +51,7 @@ const DisponibilidadeProfessor: React.FC = () => {
 
     return (
         <Container>
+            <Header />
             <Card>
                 <Title>Cadastrar Disponibilidade</Title>
                 <Form onSubmit={handleRegister}>
@@ -94,7 +96,7 @@ const Container = styled.div`
     display: flex;
     justify-content: center;
     align-items: center;
-    height: 100vh;
+    height: 127vh;
     background-color: #f5f5f5;
 `;
 
