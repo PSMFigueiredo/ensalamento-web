@@ -104,12 +104,16 @@ const Container = styled.div`
   align-items: center;
   background-color: #f5f5f5;
   min-height: 100vh;
+  margin-top: 280px;
 `;
 
 const Content = styled.div`
-  width: 100%;
-  max-width: 500px;
-  padding: 30px;
+    background: #fff;
+    padding: 30px;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    max-width: 400px;
 `;
 
 const Title = styled.h1`

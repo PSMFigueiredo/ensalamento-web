@@ -25,10 +25,6 @@ const Header: React.FC = () => {
         }
     }, [location.pathname]);
 
-    const headerStyle = isLoginPage || location.pathname === "/register"
-        ? "fixed" // Usar fixed nas páginas de login e cadastro
-        : "sticky";
-
     const navigate = useNavigate();
 
     const handleHamburgerClick = () => {
@@ -42,7 +38,7 @@ const Header: React.FC = () => {
 
     return (
         <>
-            <HeaderContainer headerStyle={headerStyle}>
+            <HeaderContainer>
                 <Logo to="/">
                     <img src={logoImg} alt="Logo" />
                 </Logo>
@@ -73,22 +69,22 @@ const Header: React.FC = () => {
                     </>
                 )}
                 {!isAuthenticated && (
-                <RightLinks>
-                    <ForgotPassword href="/forgot-password">Esqueci a senha</ForgotPassword>
-                    <Register href="#" onClick={() => navigate("/register")}>|&nbsp;&nbsp;&nbsp;&nbsp;Cadastrar Usuário</Register>
-                </RightLinks>
-            )}
+                    <RightLinks>
+                        <ForgotPassword href="/forgot-password">Esqueci a senha</ForgotPassword>
+                        <Register href="#" onClick={() => navigate("/register")}>|&nbsp;&nbsp;&nbsp;&nbsp;Cadastrar Usuário</Register>
+                    </RightLinks>
+                )}
             </HeaderContainer>
         </>
     );
 };
 
-const HeaderContainer = styled.header<{ headerStyle: string }>`
+const HeaderContainer = styled.header`
     display: flex;
     justify-content: space-between;
     align-items: center;
     background-color: #00509E;
-    position: ${({ headerStyle }) => (headerStyle === "fixed" ? "fixed" : "sticky")}; /* Condição para fixed ou sticky */
+    position: fixed;
     top: 0;
     left: 0;
     width: 100vw;
