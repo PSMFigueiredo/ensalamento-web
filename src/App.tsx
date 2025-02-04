@@ -9,6 +9,8 @@ import DashboardPage from "./components/DashboardPage.tsx";
 import ListPage from "./components/ListPage.tsx";
 import { AuthProvider, useAuth } from "./context/AuthContext.tsx";
 import RegisterProfessor from "./Pages/RegisterProfessor.tsx";
+import DisponibilidadeProfessor from "./Pages/DisponibilidadeProfessor.tsx";
+
 
 
 const ProtectedRoute: React.FC<{ children: React.ReactNode }> = ({ children }) => {
@@ -32,6 +34,7 @@ const App: React.FC = () => {
                     <Route path="/teachers" element={<ProtectedRoute><ClassRegistrationPage /> </ProtectedRoute>} />
                     <Route path="/classroom-register" element={<ProtectedRoute><ClassroomRegisterPage /> </ProtectedRoute>} />
                     <Route path="/registerProfessor" element={<ProtectedRoute><RegisterProfessor /> </ProtectedRoute> }/>
+                    <Route path="/disponibilidades-professores" element={<ProtectedRoute><DisponibilidadeProfessor /> </ProtectedRoute> }/>
                 <Route path="/register" element={<ProtectedRoute><RegisterPage /> </ProtectedRoute>} />
                     <Route path="/listpage" element={<ProtectedRoute><ListPage /> </ProtectedRoute>} />
                 </Routes>
