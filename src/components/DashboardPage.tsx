@@ -56,7 +56,7 @@ const DashboardPage: React.FC = () => {
 const styles = {
     container: {
         maxWidth: "900px",
-        margin: "50px auto",
+        margin: "250px auto",
         padding: "20px",
         textAlign: "center" as const,
     },

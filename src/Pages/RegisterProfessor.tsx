@@ -1,36 +1,38 @@
 import React, { useState } from "react";
 import styled from "styled-components";
 import api from "../services/api.ts";
+import Header from "../components/Header.tsx";
 
 const ProfessorRegister: React.FC = () => {
     const [name, setName] = useState("");
-    const [matricula , setMatricula] = useState("");
+    const [matricula, setMatricula] = useState("");
     const [cargaHoraria, setCargaHoraria] = useState("");
     const [error, setError] = useState("");
     const [success, setSuccess] = useState(false);
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
-       setError("");
-       setSuccess(false);
+        setError("");
+        setSuccess(false);
 
-       try  {
-           const response = await api.post("/professors", {
-               nome: name,
-               matricula: matricula,
-               cargaHoraria: Number (cargaHoraria),
-           });
+        try {
+            const response = await api.post("/professors", {
+                nome: name,
+                matricula: matricula,
+                cargaHoraria: Number(cargaHoraria),
+            });
 
-           console.log("Professor cadastrado com sucesso:", response.data);
-           setSuccess(true);
-       } catch (error:any) {
-           console.error("Erro ao cadastrar professor:", error);
-           setError(error.response?.data?.message || "Erro ao cadastrar professor.");
-       }
+            console.log("Professor cadastrado com sucesso:", response.data);
+            setSuccess(true);
+        } catch (error: any) {
+            console.error("Erro ao cadastrar professor:", error);
+            setError(error.response?.data?.message || "Erro ao cadastrar professor.");
+        }
     };
 
     return (
         <Container>
+            <Header />
             <Card>
                 <Title>Cadastrar Professor</Title>
                 <Form onSubmit={handleSubmit}>
@@ -69,6 +71,7 @@ const Container = styled.div`
 `;
 
 const Card = styled.div`
+    margin-top: 40px;
     background: #fff;
     padding: 30px;
     border-radius: 8px;

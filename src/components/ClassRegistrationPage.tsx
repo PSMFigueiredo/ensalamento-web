@@ -36,29 +36,31 @@ const CadastroTurmaPage: React.FC = () => {
         <div>
             <Header />
             <div style={styles.container}>
-                <h1 style={styles.title}>Digite as informações abaixo:</h1>
+                <div style={styles.card}>
+                    <h1 style={styles.title}>Digite as informações abaixo:</h1>
 
-                <div style={styles.filters}>
-                    <input
-                        type="text"
-                        placeholder="Nome da Turma"
-                        value={nome}
-                        onChange={(e) => setNome(e.target.value)}
-                        style={styles.input}
-                    />
-                    <select
-                        value={turno}
-                        onChange={(e) => setTurno(e.target.value)}
-                        style={styles.select}
-                    >
-                        <option value="">Selecione o Turno</option>
-                        <option value="Diurno">Diurno</option>
-                        <option value="Noturno">Noturno</option>
-                        <option value="Integral">Integral</option>
-                    </select>
-                    <button onClick={handleCadastrar} style={styles.button}>
-                        Cadastrar
-                    </button>
+                    <div style={styles.filters}>
+                        <input
+                            type="text"
+                            placeholder="Nome da Turma"
+                            value={nome}
+                            onChange={(e) => setNome(e.target.value)}
+                            style={styles.input}
+                        />
+                        <select
+                            value={turno}
+                            onChange={(e) => setTurno(e.target.value)}
+                            style={styles.select}
+                        >
+                            <option value="">Selecione o Turno</option>
+                            <option value="Diurno">Diurno</option>
+                            <option value="Noturno">Noturno</option>
+                            <option value="Integral">Integral</option>
+                        </select>
+                        <button onClick={handleCadastrar} style={styles.button}>
+                            Cadastrar
+                        </button>
+                    </div>
                 </div>
             </div>
         </div>
@@ -68,10 +70,20 @@ const CadastroTurmaPage: React.FC = () => {
 // Manter os estilos com 'as const' para corrigir problemas de tipagem.
 const styles = {
     container: {
-        padding: "20px",
-        maxWidth: "600px",
-        margin: "0 auto",
-        textAlign: "center" as const // Adicionando 'as const' para que o valor seja aceito como 'center', 'left', etc.
+        display: "flex",
+        justifyContent: "center",
+        alignItens: "center",
+        height: "40vh",
+        backgroundColor: "#f5f5f5",
+        marginTop: "280px",
+    },
+    card: {
+        background: "#fff",
+        padding: "30px",
+        borderRadius: "8px",
+        boxShadow: "0 4px 6px rgba(0, 0, 0, 0.1)",
+        width: "100%",
+        maxWidth: "400px",
     },
     title: {
         fontSize: "2rem",
