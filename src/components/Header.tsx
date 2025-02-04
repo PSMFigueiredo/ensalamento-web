@@ -8,9 +8,10 @@ import logoImg from "../assets/logo.png";
 const Header: React.FC = () => {
     const location = useLocation();
     const [loginText, setLoginText] = useState("Login");
-    const { isAuthenticated } = useAuth();
+    const { isAuthenticated, logout } = useAuth();
     const [isLoginPage, setIsLoginPage] = useState(false);
     const [menuOpen, setMenuOpen] = useState(false); // Controle de abertura do menu
+    const [authStatus, setAuthStatus] = useState(isAuthenticated);
 
     useEffect(() => {
         if (location.pathname === "/login") {
@@ -27,6 +28,10 @@ const Header: React.FC = () => {
 
     const navigate = useNavigate();
 
+    useEffect(() => {
+        setAuthStatus(isAuthenticated);
+    }, [isAuthenticated]);
+
     const handleHamburgerClick = () => {
         setMenuOpen(!menuOpen); // Alternar entre aberto e fechado
     };
@@ -34,6 +39,12 @@ const Header: React.FC = () => {
     const handleNavigate = (path: string) => {
         navigate(path);
         setMenuOpen(false); // Fechar o menu após a navegação
+    };
+
+    const handleLogout = async () => {
+        await logout(); // Chama a função de logout
+        setAuthStatus(false); // Atualiza manualmente o estado de autenticação
+        navigate("/login"); // Redireciona para a página de login após o logout
     };
 
     return (
@@ -63,12 +74,12 @@ const Header: React.FC = () => {
                                 <HamburgerMenuOption onClick={() => handleNavigate("/register")}>Cadastrar Professor</HamburgerMenuOption>
                                 <HamburgerMenuOption onClick={() => handleNavigate("/classroom-register")}>Cadastrar Turma</HamburgerMenuOption>
                                 <HamburgerMenuOption onClick={() => handleNavigate("/grid-register")}>Cadastrar Grade</HamburgerMenuOption>
-                                <HamburgerMenuOption onClick={() => handleNavigate("/login")}>Sair</HamburgerMenuOption>
+                                <HamburgerMenuOption onClick={handleLogout}>Sair</HamburgerMenuOption>
                             </HamburgerMenuOptions>
                         )}
                     </>
                 )}
-                {!isAuthenticated && (
+                {!authStatus && (
                     <RightLinks>
                         <ForgotPassword href="/forgot-password">Esqueci a senha</ForgotPassword>
                         <Register href="#" onClick={() => navigate("/register")}>|&nbsp;&nbsp;&nbsp;&nbsp;Cadastrar Usuário</Register>
