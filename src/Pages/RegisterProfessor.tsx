@@ -7,13 +7,16 @@ const ProfessorRegister: React.FC = () => {
     const [name, setName] = useState("");
     const [matricula, setMatricula] = useState("");
     const [cargaHoraria, setCargaHoraria] = useState("");
-    const [error, setError] = useState("");
-    const [success, setSuccess] = useState(false);
+    const [message, setMessage] = useState("");
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
-        setError("");
-        setSuccess(false);
+        setMessage("");
+
+        if (!name || !matricula || !cargaHoraria) {
+            setMessage("Por favor, preencha todos os campos.");
+            return;
+        }
 
         try {
             const response = await api.post("/professors", {
@@ -22,11 +25,19 @@ const ProfessorRegister: React.FC = () => {
                 cargaHoraria: Number(cargaHoraria),
             });
 
-            console.log("Professor cadastrado com sucesso:", response.data);
-            setSuccess(true);
-        } catch (error: any) {
+            if (response.status === 201) {
+                setMessage("Professor cadastrado com sucesso!");
+
+
+                setName("");
+                setMatricula("");
+                setCargaHoraria("");
+            } else {
+                setMessage("Erro ao cadastrar professor.");
+            }
+        } catch (error) {
             console.error("Erro ao cadastrar professor:", error);
-            setError(error.response?.data?.message || "Erro ao cadastrar professor.");
+            setMessage("Ocorreu um erro ao cadastrar o professor.");
         }
     };
 
@@ -55,6 +66,7 @@ const ProfessorRegister: React.FC = () => {
                         onChange={(e) => setCargaHoraria(e.target.value)}
                     />
                     <Button type="submit">Cadastrar</Button>
+                    {message && <Message>{message}</Message>}
                 </Form>
             </Card>
         </Container>
@@ -68,12 +80,14 @@ const Container = styled.div`
     align-items: center;
     height: 100vh;
     background-color: #f5f5f5;
+    margin-top: 80px;
 `;
 
 const Card = styled.div`
-    margin-top: 40px;
+    margin-top: 100px;
     background: #fff;
-    padding: 30px;
+    border: 30px;
+    padding: 50px;
     border-radius: 8px;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
     width: 100%;
@@ -108,10 +122,17 @@ const Button = styled.button`
     border: none;
     border-radius: 4px;
     cursor: pointer;
-    
+
     &:hover {
         background-color: #007bff;
     }
+`;
+
+const Message = styled.p`
+    font-size: 14px;
+    text-align: center;
+    color: ${({ children }) => (children === "Professor cadastrado com sucesso!" ? "green" : "red")};
+    margin-top: 10px;
 `;
 
 export default ProfessorRegister;

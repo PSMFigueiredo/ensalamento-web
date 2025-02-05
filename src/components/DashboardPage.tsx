@@ -29,7 +29,7 @@ const DashboardPage: React.FC = () => {
                         <img src={icon1B} alt="Icon 1B" style={styles.iconBottom} />
                     </div>
 
-                    <div style={styles.card} onClick={() => navigate("/teachers")}>
+                    <div style={styles.card} onClick={() => navigate("/classroom-register")}>
                         <img src={seta} alt="Icon 2" style={styles.iconTop} />
                         <h2 style={styles.cardTitle}>Turma</h2>
                         <p style={styles.cardText}>Cadastre uma nova turma no sistema.</p>

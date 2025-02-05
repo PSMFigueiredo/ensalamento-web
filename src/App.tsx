@@ -2,7 +2,6 @@ import * as React from "react";
 import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
 import LoginPage from "./components/LoginPage.tsx";
 import RegisterPage from "./Pages/RegisterPage.tsx";
-import ClassroomRegisterPage from "./components/ClassroomRegisterPage.tsx";
 import ClassRegistrationPage from "./components/ClassRegistrationPage.tsx";
 import GridRegistrationPage from "./components/GridRegistrationPage.tsx";
 import DashboardPage from "./components/DashboardPage.tsx";
@@ -32,8 +31,7 @@ const App: React.FC = () => {
                     <Route path="/login" element={<LoginPage />} />
                     <Route path="/" element={<ProtectedRoute><DashboardPage /></ProtectedRoute>} />
                     <Route path="/grid" element={<ProtectedRoute><GridRegistrationPage /></ProtectedRoute>} />
-                    <Route path="/teachers" element={<ProtectedRoute><ClassRegistrationPage /> </ProtectedRoute>} />
-                    <Route path="/classroom-register" element={<ProtectedRoute><ClassroomRegisterPage /> </ProtectedRoute>} />
+                    <Route path="/classroom-register" element={<ProtectedRoute><ClassRegistrationPage /> </ProtectedRoute>} />
                     <Route path="/registerProfessor" element={<ProtectedRoute><RegisterProfessor /> </ProtectedRoute>} />
                     <Route path="/register" element={<ProtectedRoute><RegisterPage /> </ProtectedRoute>} />
                     <Route path="/subject" element={<ProtectedRoute><SubjectPage /> </ProtectedRoute>} />
