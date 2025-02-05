@@ -3,32 +3,46 @@ import axios from "axios";
 import Header from "../components/Header.tsx";
 
 const CadastroTurmaPage: React.FC = () => {
-    const [nome, setNome] = useState(""); // Nome da turma
-    const [turno, setTurno] = useState(""); // Turno (Diurno, Noturno, Integral)
+    const [nome, setNome] = useState("");
+    const [message, setMessage] = useState("");
 
-    // Função para enviar os dados ao backend
     const handleCadastrar = async () => {
-        if (!nome || !turno) {
-            alert("Por favor, preencha todos os campos.");
+        setMessage("");
+
+        if (!nome) {
+            setMessage("Por favor, preencha o nome da turma.");
             return;
         }
 
         try {
-            const turma = { nome, turno };
+            const turma = { nome };
+            const token = localStorage.getItem("token");
 
-            // Envia os dados para o backend via API usando axios
-            const response = await axios.post("http://localhost:3000/turmas", turma);
+            if (!token) {
+                setMessage("Usuário não autenticado. Faça login novamente.");
+                return;
+            }
+
+            const response = await axios.post(
+                "http://localhost:3000/turmas",
+                turma,
+                {
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                        "Content-Type": "application/json",
+                    },
+                }
+            );
 
             if (response.status === 201) {
-                alert("Turma cadastrada com sucesso!");
-                setNome(""); // Limpar o campo de nome após o cadastro
-                setTurno(""); // Limpar o campo de turno após o cadastro
+                setMessage("Turma cadastrada com sucesso!");
+                setNome("");
             } else {
-                alert("Erro ao cadastrar turma.");
+                setMessage("Erro ao cadastrar turma.");
             }
         } catch (error) {
             console.error("Erro ao cadastrar turma:", error);
-            alert("Ocorreu um erro ao cadastrar a turma.");
+            setMessage("Ocorreu um erro ao cadastrar a turma.");
         }
     };
 
@@ -37,7 +51,7 @@ const CadastroTurmaPage: React.FC = () => {
             <Header />
             <div style={styles.container}>
                 <div style={styles.card}>
-                    <h1 style={styles.title}>Digite as informações abaixo:</h1>
+                    <h1 style={styles.title}>Cadastrar Turma</h1>
 
                     <div style={styles.filters}>
                         <input
@@ -47,32 +61,24 @@ const CadastroTurmaPage: React.FC = () => {
                             onChange={(e) => setNome(e.target.value)}
                             style={styles.input}
                         />
-                        <select
-                            value={turno}
-                            onChange={(e) => setTurno(e.target.value)}
-                            style={styles.select}
-                        >
-                            <option value="">Selecione o Turno</option>
-                            <option value="Diurno">Diurno</option>
-                            <option value="Noturno">Noturno</option>
-                            <option value="Integral">Integral</option>
-                        </select>
                         <button onClick={handleCadastrar} style={styles.button}>
                             Cadastrar
                         </button>
                     </div>
+
+                    {message && <p style={styles.message}>{message}</p>}
                 </div>
             </div>
         </div>
     );
 };
 
-// Manter os estilos com 'as const' para corrigir problemas de tipagem.
+// Estilos
 const styles = {
     container: {
         display: "flex",
         justifyContent: "center",
-        alignItens: "center",
+        alignItems: "center",
         height: "40vh",
         backgroundColor: "#f5f5f5",
         marginTop: "280px",
@@ -88,34 +94,20 @@ const styles = {
     title: {
         fontSize: "2rem",
         marginBottom: "20px",
-        color: "#8f9bb3"
-    },
-    form: {
-        display: "flex",
-        justifyContent: "space-between", // Para colocar os campos lado a lado
-        gap: "20px",
-        marginBottom: "20px",
+        color: "#8f9bb3",
+        textAlign: "center",
     },
     filters: {
         display: "flex",
-        flexDirection: "column" as const, // Adicionando 'as const' para garantir que 'flexDirection' seja tratado corretamente
+        flexDirection: "column" as const,
         gap: "20px",
-        marginBottom: "20px"
+        marginBottom: "20px",
     },
     input: {
         padding: "10px",
         fontSize: "14px",
         borderRadius: "8px",
         border: "1px solid #ccc",
-        flex: 1 // Faz com que o campo ocupe todo o espaço disponível
-    },
-    select: {
-        padding: "10px",
-        borderRadius: "8px",
-        fontSize: "14px",
-        border: "1px solid #ccc",
-        paddingRight: "10px",
-        flex: 1 // Faz com que o campo ocupe todo o espaço disponível
     },
     button: {
         padding: "10px 15px",
@@ -125,6 +117,12 @@ const styles = {
         border: "none",
         borderRadius: "8px",
         cursor: "pointer",
+    },
+    message: {
+        textAlign: "center",
+        fontSize: "14px",
+        color: "green",
+        marginTop: "10px",
     },
 };
 

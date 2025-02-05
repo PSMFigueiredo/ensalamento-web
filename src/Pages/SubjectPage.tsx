@@ -1,57 +1,77 @@
 import React, { useState, useEffect } from "react";
-import axios from "axios"; // Usando Axios para as requisições
+import axios from "axios";
 import styled from "styled-components";
-import Header from "../components/Header"; // Cabeçalho
+import Header from "../components/Header";
 
 const SubjectPage: React.FC = () => {
   const [professors, setProfessors] = useState([]);
   const [selectedProfessor, setSelectedProfessor] = useState("");
+  const [disciplines, setDisciplines] = useState([]);
   const [selectedDisciplines, setSelectedDisciplines] = useState<string[]>([]);
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
 
-  // Carregar professores ao montar o componente
   useEffect(() => {
-    const fetchProfessors = async () => {
+    const fetchData = async () => {
       try {
-        const response = await axios.get("/professors");
-        setProfessors(response.data.data.professores);
+        const professorResponse = await axios.get("http://localhost:3000/professors", {
+          headers: { Authorization: `Bearer ${localStorage.getItem("token")}` }
+        });
+
+        if (professorResponse.data?.data?.professores) {
+          setProfessors(professorResponse.data.data.professores);
+        } else {
+          throw new Error("Formato inesperado para professores.");
+        }
+
+        const disciplineResponse = await axios.get("http://localhost:3000/disciplinas", {
+          headers: { Authorization: `Bearer ${localStorage.getItem("token")}` }
+        });
+
+        if (disciplineResponse.data?.data?.disciplinas) {
+          setDisciplines(disciplineResponse.data.data.disciplinas);
+        } else {
+          throw new Error("Formato inesperado para disciplinas.");
+        }
       } catch (error) {
-        console.error("Erro ao buscar professores:", error);
+        console.error("Erro ao carregar dados:", error);
+        setError("Erro ao carregar dados do servidor.");
       }
     };
-    fetchProfessors();
+
+    fetchData();
   }, []);
 
-  // Função de envio dos dados para o backend
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    setError(""); // Resetando erros
+    setError("");
+    setSuccess("");
 
-    // Validar se o professor e as disciplinas estão selecionados
     if (!selectedProfessor || selectedDisciplines.length === 0) {
       setError("Por favor, selecione um professor e ao menos uma disciplina.");
       return;
     }
 
-    const data = {
-      professorId: selectedProfessor,
-      disciplinas: selectedDisciplines,
-    };
-
     try {
-      const response = await axios.post("/subject", data);
-      if (response.status === 201) {
-        setSuccess("Disciplinas atribuídas com sucesso!");
-        console.log("Dados enviados:", data);
-      }
+      const requests = selectedDisciplines.map((disciplinaId) =>
+          axios.post(
+              "http://localhost:3000/disciplinas-professores",
+              { disciplinaId, professorId: selectedProfessor },
+              { headers: { Authorization: `Bearer ${localStorage.getItem("token")}` } }
+          )
+      );
+
+      await Promise.all(requests);
+
+      setSuccess("Disciplinas atribuídas com sucesso!");
+      setSelectedDisciplines([]);
+      setSelectedProfessor("");
     } catch (error) {
       console.error("Erro ao atribuir disciplinas:", error);
       setError("Erro ao atribuir disciplinas.");
     }
   };
 
-  // Função para lidar com a seleção das disciplinas
   const handleDisciplineChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { value, checked } = e.target;
     if (checked) {
@@ -62,65 +82,54 @@ const SubjectPage: React.FC = () => {
   };
 
   return (
-    <Container>
-      <Header /> {/* Cabeçalho */}
-      <Content>
-        <Title>Atribuir Disciplinas</Title>
-        {error && <ErrorMessage>{error}</ErrorMessage>}
-        {success && <SuccessMessage>{success}</SuccessMessage>}
-        <Form onSubmit={handleSubmit}>
-          {/* Campo Professor */}
-          <Select value={selectedProfessor} onChange={(e) => setSelectedProfessor(e.target.value)} required>
-            <option value="">Selecione um professor</option>
-            {professors.map((prof) => (
-              <option key={prof.id} value={prof.id}>
-                {prof.nome}
-              </option>
-            ))}
-          </Select>
+      <Container>
+        <Header />
+        <Content>
+          <Title>Atribuir Disciplinas</Title>
+          {error && <ErrorMessage>{error}</ErrorMessage>}
+          {success && <SuccessMessage>{success}</SuccessMessage>}
+          <Form onSubmit={handleSubmit}>
+            <Label>Professor:</Label>
+            <Select value={selectedProfessor} onChange={(e) => setSelectedProfessor(e.target.value)} required>
+              <option value="">Selecione um professor</option>
+              {professors.map((prof) => (
+                  <option key={prof.id} value={prof.id}>
+                    {prof.nome}
+                  </option>
+              ))}
+            </Select>
 
-          {/* Campo Disciplinas */}
-          <Label htmlFor="disciplinas">Disciplinas</Label>
-          <DisciplinasContainer>
-            {[
-              "Português",
-              "Matemática",
-              "História",
-              "Artes",
-              "Educação Física",
-              "Ensino Religioso",
-              "Ciências da Natureza",
-              "Inglês",
-              "Geografia",
-            ].map((disciplinaItem) => (
-              <CheckboxLabel key={disciplinaItem}>
-                <Checkbox
-                  type="checkbox"
-                  name="disciplina"
-                  value={disciplinaItem}
-                  checked={selectedDisciplines.includes(disciplinaItem)}
-                  onChange={handleDisciplineChange}
-                />
-                {disciplinaItem}
-              </CheckboxLabel>
-            ))}
-          </DisciplinasContainer>
+            <Label>Disciplinas:</Label>
+            <DisciplinasContainer>
+              {disciplines.map((subject) => (
+                  <CheckboxLabel key={subject.id}>
+                    <Checkbox
+                        type="checkbox"
+                        name="disciplina"
+                        value={subject.id}
+                        checked={selectedDisciplines.includes(subject.id)}
+                        onChange={handleDisciplineChange}
+                    />
+                    {subject.nome}
+                  </CheckboxLabel>
+              ))}
+            </DisciplinasContainer>
 
-          <Button type="submit">Cadastrar</Button>
-        </Form>
-      </Content>
-    </Container>
+            <Button type="submit">Atribuir</Button>
+          </Form>
+        </Content>
+      </Container>
   );
 };
 
-// Estilos
+// Estilização
 const Container = styled.div`
   display: flex;
-  flex-direction: column;
+  justify-content: center;
   align-items: center;
+  height: 100vh;
   background-color: #f5f5f5;
-  min-height: 100vh;
-  margin-top: 280px;
+  margin-top: 350px
 `;
 
 const Content = styled.div`
@@ -133,34 +142,28 @@ const Content = styled.div`
 `;
 
 const Title = styled.h1`
-  font-size: 2rem;
+  font-size: 24px;
   text-align: center;
   margin-bottom: 20px;
-  color: #8f9bb3;
+  color: #333;
 `;
 
 const Form = styled.form`
   display: flex;
   flex-direction: column;
-  gap: 20px;
+  gap: 15px;
 `;
 
 const Label = styled.label`
   font-size: 16px;
-  color: #8f9bb3;
-  margin-bottom: 5px;
+  color: #333;
 `;
 
 const Select = styled.select`
-  padding: 12px;
+  padding: 10px;
   font-size: 16px;
   border: 1px solid #ccc;
-  border-radius: 8px;
-  outline: none;
-
-  &:focus {
-    border-color: #00509e;
-  }
+  border-radius: 4px;
 `;
 
 const DisciplinasContainer = styled.div`
@@ -185,12 +188,12 @@ const Checkbox = styled.input`
 `;
 
 const Button = styled.button`
-  padding: 12px;
+  padding: 10px 15px;
   font-size: 16px;
   color: #fff;
-  background-color: #00509e;
+  background-color: #00509E;
   border: none;
-  border-radius: 8px;
+  border-radius: 4px;
   cursor: pointer;
 
   &:hover {
@@ -199,15 +202,15 @@ const Button = styled.button`
 `;
 
 const ErrorMessage = styled.p`
-  color: red;
-  font-size: 14px;
-  text-align: center;
+    color: red;
+    font-size: 14px;
+    text-align: center;
 `;
 
 const SuccessMessage = styled.p`
-  color: green;
-  font-size: 14px;
-  text-align: center;
+    color: green;
+    font-size: 14px;
+    text-align: center;
 `;
 
 export default SubjectPage;
