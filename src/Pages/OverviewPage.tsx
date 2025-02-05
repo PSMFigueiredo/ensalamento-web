@@ -3,6 +3,7 @@ import axios from "axios";
 import styled from "styled-components";
 import { FaEdit, FaTrash } from "react-icons/fa";
 import EditProfessorModal from "../components/EditProfessorModal"; // Importando a modal
+import Header from "../components/Header";
 
 const OverviewPage: React.FC = () => {
     const [professors, setProfessors] = useState([]);
@@ -54,6 +55,7 @@ const OverviewPage: React.FC = () => {
 
     return (
         <Container>
+            <Header />
             <Title>Visão Geral de Professores</Title>
             {loading ? (
                 <p>Carregando...</p>
@@ -62,25 +64,25 @@ const OverviewPage: React.FC = () => {
             ) : (
                 <Table>
                     <thead>
-                    <tr>
-                        <th>Nome</th>
-                        <th>Disciplinas</th>
-                        <th>Turmas</th>
-                        <th>Ações</th>
-                    </tr>
+                        <tr>
+                            <th>Nome</th>
+                            <th>Disciplinas</th>
+                            <th>Turmas</th>
+                            <th>Ações</th>
+                        </tr>
                     </thead>
                     <tbody>
-                    {professors.map((professor) => (
-                        <tr key={professor.id}>
-                            <td>{professor.nome}</td>
-                            <td>{professor.disciplinas?.join(", ") || "Nenhuma"}</td>
-                            <td>{professor.turmas?.join(", ") || "Nenhuma"}</td>
-                            <td>
-                                <EditIcon onClick={() => handleEdit(professor)} />
-                                <DeleteIcon onClick={() => handleDelete(professor.id)} />
-                            </td>
-                        </tr>
-                    ))}
+                        {professors.map((professor) => (
+                            <tr key={professor.id}>
+                                <td>{professor.nome}</td>
+                                <td>{professor.disciplinas?.join(", ") || "Nenhuma"}</td>
+                                <td>{professor.turmas?.join(", ") || "Nenhuma"}</td>
+                                <td>
+                                    <EditIcon onClick={() => handleEdit(professor)} />
+                                    <DeleteIcon onClick={() => handleDelete(professor.id)} />
+                                </td>
+                            </tr>
+                        ))}
                     </tbody>
                 </Table>
             )}
@@ -117,6 +119,7 @@ const Container = styled.div`
     display: flex;
     flex-direction: column;
     align-items: center;
+    margin-top:250px;
     background-color: #f5f5f5;
     min-height: 100vh;
     padding: 20px;
