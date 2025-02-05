@@ -36,7 +36,7 @@ const DashboardPage: React.FC = () => {
                         <img src={icon2B} alt="Icon 2B" style={styles.iconBottom} />
                     </div>
 
-                    <div style={styles.card} onClick={() => navigate("/grid")}>
+                    <div style={styles.card} onClick={() => navigate("/gridpage")}>
                         <img src={seta} alt="Icon 3" style={styles.iconTop} />
                         <h2 style={styles.cardTitle}>Grade</h2>
                         <p style={styles.cardText}>Monte a grade horária para as turmas.</p>
@@ -57,7 +57,7 @@ const DashboardPage: React.FC = () => {
                         <img src={icon6B} alt="Icon 6B" style={styles.iconBottom} />
                     </div>
 
-                    <div style={styles.card} onClick={() => navigate("/listpage")}>
+                    <div style={styles.card} onClick={() => navigate("/overview")}>
                         <img src={seta} alt="Icon 4" style={styles.iconTop} />
                         <h2 style={styles.cardTitle}>Geral</h2>
                         <p style={styles.cardText}>Cadastre um novo usuário no sistema.</p>

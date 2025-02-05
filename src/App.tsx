@@ -10,6 +10,8 @@ import { AuthProvider, useAuth } from "./context/AuthContext.tsx";
 import RegisterProfessor from "./Pages/RegisterProfessor.tsx";
 import SubjectPage from "./Pages/SubjectPage.tsx";
 import AvailablePage from "./Pages/AvailablePage.tsx";
+import GradeHorariaPage from "./Pages/GradeHorariaPage.tsx";
+import OverviewPage from "./Pages/OverviewPage.tsx";
 
 
 
@@ -37,6 +39,8 @@ const App: React.FC = () => {
                     <Route path="/subject" element={<ProtectedRoute><SubjectPage /> </ProtectedRoute>} />
                     <Route path="/available" element={<ProtectedRoute><AvailablePage /> </ProtectedRoute>} />
                     <Route path="/listpage" element={<ProtectedRoute><ListPage /> </ProtectedRoute>} />
+                    <Route path="/gridPage" element={<ProtectedRoute><GradeHorariaPage /> </ProtectedRoute>} />
+                    <Route path="/overview" element={<ProtectedRoute><OverviewPage /> </ProtectedRoute>} />
                 </Routes>
             </Router>
         </AuthProvider>
