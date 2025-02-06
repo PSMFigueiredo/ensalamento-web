@@ -67,11 +67,11 @@ const RegisterPage: React.FC = () => {
 const Container = styled.div`
     display: flex;
     justify-content: center;
-    align-items: flex-start;  /* Alinha o conteúdo ao topo */
+    align-items: flex-start;  
     background-color: #f5f5f5;
     width: 100%;
-    min-height: calc(100vh - 230px);  /* Garante que o conteúdo ocupe o restante da tela */
-    padding: 0 20px;  /* Adiciona algum espaçamento nas laterais */
+    min-height: calc(100vh - 230px);  
+    padding: 0 20px;  
 `;
 
 const Card = styled.div`

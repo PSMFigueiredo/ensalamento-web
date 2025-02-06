@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Form as RouterForm, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext.tsx";
 import Header from "../components/Header.tsx";
 import styled from "styled-components";
@@ -16,10 +16,8 @@ const LoginPage: React.FC = () => {
     const handleLogin = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         const success = await login(email, password);
-        console.log("Sucesso no login:", success)
         if (success) {
-            console.log("Redirecionando para a pagina inicial...")
-            navigate("/")
+            navigate("/dashboard");
         } else {
             console.log("Falha no login")
             setError("Credenciais inválidas. Tente novamente.");

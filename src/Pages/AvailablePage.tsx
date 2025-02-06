@@ -96,7 +96,7 @@ const Container = styled.div`
     display: flex;
     justify-content: center;
     align-items: center;
-    margin-top:280px;
+    height: 127vh;
     background-color: #f5f5f5;
 `;
 
