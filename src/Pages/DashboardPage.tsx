@@ -61,6 +61,12 @@ const DashboardPage: React.FC = () => {
                         <p style={styles.cardText}>Cadastre um novo usuário no sistema.</p>
                         <img src={icon4B} alt="Icon 4B" style={styles.iconBottom} />
                     </div>
+                    <div style={styles.card} onClick={() => navigate("/selecionar-turma-professores")}>
+                        <img src={seta} alt="Icon 4" style={styles.iconTop} />
+                        <h2 style={styles.cardTitle}>Gerar grade</h2>
+                        <p style={styles.cardText}>Cadastrar grade por turma.</p>
+                        <img src={icon4B} alt="Icon 4B" style={styles.iconBottom} />
+                    </div>
                 </div>
             </div>
         </div>

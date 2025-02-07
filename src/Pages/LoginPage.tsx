@@ -6,23 +6,26 @@ import styled from "styled-components";
 
 const LoginPage: React.FC = () => {
     const [email, setEmail] = useState("");
-    const [password, setpassword] = useState("");
+    const [password, setPassword] = useState("");
     const [error, setError] = useState("");
     const navigate = useNavigate();
     const { login } = useAuth();
 
-    console.log("AuthContext:", useAuth());
-
     const handleLogin = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
-        const success = await login(email, password);
-        if (success) {
-            navigate("/dashboard");
-        } else {
-            console.log("Falha no login")
-            setError("Credenciais inválidas. Tente novamente.");
-        }
+        setError("");
 
+        try {
+            const success = await login(email, password);
+            if (success) {
+                navigate("/dashboard");
+            } else {
+                setError("Credenciais inválidas. Tente novamente.");
+            }
+        } catch (error) {
+            console.error("Erro ao fazer login:", error);
+            setError("Ocorreu um erro ao tentar logar.");
+        }
     };
 
     return (
@@ -30,10 +33,22 @@ const LoginPage: React.FC = () => {
             <Header />
             <Card>
                 <Title>Login</Title>
+                {error && <ErrorMessage>{error}</ErrorMessage>}
                 <Form onSubmit={handleLogin}>
-                    <Input type="text" placeholder="E-mail" value={email} onChange={(e) => setEmail(e.target.value)} />
-                    <Input type="password" placeholder="Senha" value={password}
-                        onChange={(e) => setpassword(e.target.value)} />
+                    <Input
+                        type="email"
+                        placeholder="E-mail"
+                        value={email}
+                        onChange={(e) => setEmail(e.target.value)}
+                        required
+                    />
+                    <Input
+                        type="password"
+                        placeholder="Senha"
+                        value={password}
+                        onChange={(e) => setPassword(e.target.value)}
+                        required
+                    />
                     <Button type="submit">Entrar</Button>
                 </Form>
             </Card>
@@ -41,14 +56,15 @@ const LoginPage: React.FC = () => {
     );
 };
 
+// Estilos
 const Container = styled.div`
-display: flex;
+    display: flex;
     justify-content: center;
     align-items: center;
     height: 100vh;
-    margin-top: 80px;
     background-color: #f5f5f5;
 `;
+
 const Card = styled.div`
     background: #fff;
     padding: 30px;
@@ -57,6 +73,7 @@ const Card = styled.div`
     width: 100%;
     max-width: 400px;
 `;
+
 const Title = styled.h1`
     font-size: 24px;
     text-align: center;
@@ -75,6 +92,7 @@ const Input = styled.input`
     font-size: 16px;
     border: 1px solid #ccc;
     border-radius: 4px;
+    width: 100%;
 `;
 
 const Button = styled.button`
@@ -85,13 +103,16 @@ const Button = styled.button`
     border: none;
     border-radius: 4px;
     cursor: pointer;
-    
+
     &:hover {
         background-color: #007bff;
     }
-`
+`;
 
-
-
+const ErrorMessage = styled.p`
+    color: red;
+    font-size: 14px;
+    text-align: center;
+`;
 
 export default LoginPage;

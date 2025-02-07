@@ -9,7 +9,6 @@ const OverviewPage: React.FC = () => {
     const [professors, setProfessors] = useState([]);
     const [selectedProfessor, setSelectedProfessor] = useState<any>(null);
     const [showEditModal, setShowEditModal] = useState(false);
-    const [showConfirmDelete, setShowConfirmDelete] = useState(false);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState("");
 
@@ -30,24 +29,25 @@ const OverviewPage: React.FC = () => {
             console.log("Professores da API:", responseProfessors.data);
             console.log("Disciplinas-Professores da API:", responseDisciplines.data);
 
-            const professoresMap = responseProfessors.data.data.professores.reduce((acc, professor) => {
+            const professorsMap = responseProfessors.data.data.professores.reduce((acc, professor) => {
                 acc[professor.id] = {
                     id: professor.id,
                     nome: professor.nome,
-                    disciplinas: [],
-                    turmas: []
+                    disciplinas: []
                 };
                 return acc;
             }, {});
 
             responseDisciplines.data.data.disciplinasProfessores.forEach(dp => {
-                if (professoresMap[dp.professorId]) {
-                    if (dp.disciplinaNome) professoresMap[dp.professorId].disciplinas.push(dp.disciplinaNome);
-                    if (dp.turmaNome) professoresMap[dp.professorId].turmas.push(dp.turmaNome);
+                if (professorsMap[dp.professorId]) {
+                    professorsMap[dp.professorId].disciplinas.push({
+                        id: dp.disciplinaId,
+                        nome: dp.disciplinaNome
+                    });
                 }
             });
 
-            setProfessors(Object.values(professoresMap));
+            setProfessors(Object.values(professorsMap));
             setLoading(false);
         } catch (error) {
             console.error("Erro ao buscar professores:", error);
@@ -62,19 +62,14 @@ const OverviewPage: React.FC = () => {
     };
 
     const handleDelete = async (professorId: string) => {
-        setShowConfirmDelete(true);
-        setSelectedProfessor(professorId);
-    };
-
-    const confirmDelete = async () => {
         try {
-            await axios.delete(`http://localhost:3000/professors/${selectedProfessor}`, {
+            await axios.delete(`http://localhost:3000/professors/${professorId}`, {
                 headers: { Authorization: `Bearer ${localStorage.getItem("token")}` }
             });
-            setProfessors(professors.filter(p => p.id !== selectedProfessor));
-            setShowConfirmDelete(false);
+            setProfessors(professors.filter(p => p.id !== professorId));
         } catch (error) {
             console.error("Erro ao excluir professor:", error);
+            setError("Erro ao excluir professor.");
         }
     };
 
@@ -82,17 +77,12 @@ const OverviewPage: React.FC = () => {
         <Container>
             <Header />
             <Title>Visão Geral de Professores</Title>
-            {loading ? (
-                <p>Carregando...</p>
-            ) : error ? (
-                <p>{error}</p>
-            ) : (
+            {loading ? <p>Carregando...</p> : error ? <ErrorMessage>{error}</ErrorMessage> : (
                 <Table>
                     <thead>
                     <tr>
                         <th>Nome</th>
                         <th>Disciplinas</th>
-                        <th>Turmas</th>
                         <th>Ações</th>
                     </tr>
                     </thead>
@@ -100,8 +90,7 @@ const OverviewPage: React.FC = () => {
                     {professors.map((professor) => (
                         <tr key={professor.id}>
                             <td>{professor.nome}</td>
-                            <td>{professor.disciplinas.length > 0 ? professor.disciplinas.join(", ") : "Nenhuma"}</td>
-                            <td>{professor.turmas.length > 0 ? professor.turmas.join(", ") : "Nenhuma"}</td>
+                            <td>{professor.disciplinas.length > 0 ? professor.disciplinas.map(d => d.nome).join(", ") : "Nenhuma"}</td>
                             <td>
                                 <EditIcon onClick={() => handleEdit(professor)} />
                                 <DeleteIcon onClick={() => handleDelete(professor.id)} />
@@ -112,28 +101,8 @@ const OverviewPage: React.FC = () => {
                 </Table>
             )}
 
-            {/* Modal para edição */}
             {showEditModal && selectedProfessor && (
-                <EditProfessorModal
-                    professor={selectedProfessor}
-                    onClose={() => setShowEditModal(false)}
-                    onConfirm={() => {
-                        setShowEditModal(false);
-                        fetchProfessors(); // Atualiza a lista após edição
-                    }}
-                />
-            )}
-
-            {/* Modal para confirmação de exclusão */}
-            {showConfirmDelete && (
-                <ModalOverlay>
-                    <ModalContent>
-                        <h3>Excluir Professor</h3>
-                        <p>Tem certeza que deseja excluir este professor? Essa ação não pode ser desfeita.</p>
-                        <Button onClick={() => setShowConfirmDelete(false)}>Cancelar</Button>
-                        <Button danger onClick={confirmDelete}>Excluir</Button>
-                    </ModalContent>
-                </ModalOverlay>
+                <EditProfessorModal professor={selectedProfessor} onClose={() => setShowEditModal(false)} onConfirm={fetchProfessors} />
             )}
         </Container>
     );
@@ -144,7 +113,7 @@ const Container = styled.div`
     display: flex;
     flex-direction: column;
     align-items: center;
-    margin-top:250px;
+    margin-top: 250px;
     background-color: #f5f5f5;
     min-height: 100vh;
     padding: 20px;
@@ -172,6 +141,12 @@ const Table = styled.table`
     }
 `;
 
+const ErrorMessage = styled.p`
+    color: red;
+    font-size: 14px;
+    text-align: center;
+`;
+
 const EditIcon = styled(FaEdit)`
     cursor: pointer;
     color: #007bff;
@@ -185,39 +160,9 @@ const EditIcon = styled(FaEdit)`
 const DeleteIcon = styled(FaTrash)`
     cursor: pointer;
     color: #ff4d4d;
-
     &:hover {
         color: #cc0000;
     }
-`;
-
-const ModalOverlay = styled.div`
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: rgba(0, 0, 0, 0.5);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-`;
-
-const ModalContent = styled.div`
-    background: white;
-    padding: 20px;
-    border-radius: 8px;
-    text-align: center;
-`;
-
-const Button = styled.button<{ danger?: boolean }>`
-    padding: 10px;
-    margin: 10px;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    background: ${props => props.danger ? "#ff4d4d" : "#ccc"};
-    color: white;
 `;
 
 export default OverviewPage;

@@ -3,158 +3,88 @@ import axios from "axios";
 import styled from "styled-components";
 
 const EditProfessorModal = ({ professor, onClose, onConfirm }) => {
-    const [name, setName] = useState(professor.nome);
-    const [matricula, setMatricula] = useState(professor.matricula);
-    const [cargaHoraria, setCargaHoraria] = useState(professor.cargaHoraria);
-    const [selectedDisciplines, setSelectedDisciplines] = useState([]);
-    const [availability, setAvailability] = useState([]);
+    const [selectedDisciplines, setSelectedDisciplines] = useState<string[]>([]);
+    const [availableDisciplines, setAvailableDisciplines] = useState<{ id: string, nome: string }[]>([]);
     const [error, setError] = useState("");
     const [loading, setLoading] = useState(false);
 
     useEffect(() => {
         fetchDisciplines();
-        fetchAvailability();
     }, []);
 
+    // Busca todas as disciplinas disponíveis e as que o professor já tem
     const fetchDisciplines = async () => {
         try {
-            const response = await axios.get("http://localhost:3000/disciplinas-professores", {
+            const response = await axios.get("http://localhost:3000/disciplinas", {
                 headers: { Authorization: `Bearer ${localStorage.getItem("token")}` }
             });
 
-            console.log("Disciplinas recebidas:", response.data);
+            const responseAssoc = await axios.get(`http://localhost:3000/disciplinas-professores`, {
+                headers: { Authorization: `Bearer ${localStorage.getItem("token")}` }
+            });
 
-            if (Array.isArray(response.data.data)) {
-                setSelectedDisciplines(response.data.data);
-            } else {
-                setSelectedDisciplines([]);
-            }
+            console.log("Dados das disciplinas recebidas:", response.data);
+            console.log("Dados de disciplinas-professor recebidas:", responseAssoc.data);
+
+            // Garante que response.data.data existe antes de acessar
+            const disciplinas = response.data?.data?.disciplinas || [];
+            setAvailableDisciplines(disciplinas);
+
+            const associated = responseAssoc.data?.data?.disciplinasProfessores
+                ?.filter(dp => dp.professorId === professor.id)
+                ?.map(dp => dp.disciplinaId) || [];
+
+            setSelectedDisciplines(associated);
         } catch (error) {
             console.error("Erro ao carregar disciplinas:", error);
-            setSelectedDisciplines([]);
+            setError("Erro ao carregar disciplinas.");
         }
     };
 
-    const fetchAvailability = async () => {
-        try {
-            const response = await axios.get("http://localhost:3000/disponibilidades-professores", {
-                headers: { Authorization: `Bearer ${localStorage.getItem("token")}` }
-            });
-
-            console.log("Disponibilidade recebida:", response.data);
-
-            if (Array.isArray(response.data.data)) {
-                setAvailability(response.data.data);
-            } else {
-                setAvailability([]);
-            }
-        } catch (error) {
-            console.error("Erro ao carregar disponibilidade:", error);
-            setAvailability([]);
-        }
-    };
-
-
+    // Atualiza a relação do professor com as disciplinas
     const handleUpdate = async () => {
         setLoading(true);
         setError("");
 
+        const payload = {
+            disciplinaIds: selectedDisciplines, // Garantindo que seja um array
+            professorId: professor.id
+        };
+
+        console.log("Enviando dados para API:", payload);
+
         try {
             await axios.put(
-                `http://localhost:3000/professors/${professor.id}`,
-                {
-                    nome: name,
-                    matricula: Number(matricula),
-                    cargaHoraria: Number(cargaHoraria)
-                },
-                { headers: { Authorization: `Bearer ${localStorage.getItem("token")}` } }
-            );
-
-            await Promise.all(
-                availability.map((disponibilidade) =>
-                    axios.put(
-                        `http://localhost:3000/disponibilidades-professores/${professor.id}`,
-                        { ...disponibilidade, professorId: professor.id },
-                        { headers: { Authorization: `Bearer ${localStorage.getItem("token")}` } }
-                    )
-                )
-            );
-
-            await axios.put(
                 `http://localhost:3000/disciplinas-professores/${professor.id}`,
-                {
-                    disciplinaId: selectedDisciplines.map((disciplina) => disciplina.id),
-                    professorId: professor.id
-                },
+                payload,
                 { headers: { Authorization: `Bearer ${localStorage.getItem("token")}` } }
             );
 
             onConfirm();
         } catch (error) {
-            console.error("Erro ao atualizar professor:", error);
-            setError("Erro ao atualizar professor.");
+            console.error("Erro ao atualizar disciplinas:", error.response?.data || error);
+            setError("Erro ao atualizar disciplinas.");
         } finally {
             setLoading(false);
         }
     };
 
-
     return (
         <ModalOverlay>
             <ModalContent>
-                <h3>Editar Professor</h3>
+                <h3>Editar Disciplinas do Professor</h3>
                 {error && <ErrorMessage>{error}</ErrorMessage>}
 
-                <Label>Nome:</Label>
-                <Input type="text" value={name} onChange={(e) => setName(e.target.value)} />
-
-                <Label>Matrícula:</Label>
-                <Input type="number" value={matricula} onChange={(e) => setMatricula(e.target.value)} />
-
-                <Label>Carga Horária:</Label>
-                <Input type="number" value={cargaHoraria} onChange={(e) => setCargaHoraria(e.target.value)} />
-
                 <Label>Disciplinas:</Label>
-                <Select multiple value={selectedDisciplines} onChange={(e) => setSelectedDisciplines([...e.target.selectedOptions].map(o => o.value))}>
-                    {selectedDisciplines.map((disciplina) => (
+                <Select multiple value={selectedDisciplines} onChange={(e) => {
+                    setSelectedDisciplines([...e.target.selectedOptions].map(o => o.value));
+                }}>
+                    {availableDisciplines.map((disciplina) => (
                         <option key={disciplina.id} value={disciplina.id}>
                             {disciplina.nome}
                         </option>
                     ))}
                 </Select>
-
-                <Label>Disponibilidade:</Label>
-                {availability.map((item, index) => (
-                    <div key={index}>
-                        <Input
-                            type="text"
-                            value={item.diaDaSemana}
-                            onChange={(e) => {
-                                const newAvailability = [...availability];
-                                newAvailability[index].diaDaSemana = e.target.value;
-                                setAvailability(newAvailability);
-                            }}
-                        />
-                        <Input
-                            type="time"
-                            value={item.inicioHora}
-                            onChange={(e) => {
-                                const newAvailability = [...availability];
-                                newAvailability[index].inicioHora = e.target.value;
-                                setAvailability(newAvailability);
-                            }}
-                        />
-                        <Input
-                            type="time"
-                            value={item.fimHora}
-                            onChange={(e) => {
-                                const newAvailability = [...availability];
-                                newAvailability[index].fimHora = e.target.value;
-                                setAvailability(newAvailability);
-                            }}
-                        />
-                    </div>
-                ))}
 
                 <Button onClick={handleUpdate} disabled={loading}>
                     {loading ? "Salvando..." : "Salvar"}
@@ -165,7 +95,7 @@ const EditProfessorModal = ({ professor, onClose, onConfirm }) => {
     );
 };
 
-
+// Estilos
 const ModalOverlay = styled.div`
     position: fixed;
     top: 0;
@@ -176,7 +106,6 @@ const ModalOverlay = styled.div`
     display: flex;
     justify-content: center;
     align-items: center;
-    border-top: 200px;
 `;
 
 const ModalContent = styled.div`
@@ -193,14 +122,6 @@ const Label = styled.label`
     margin-top: 10px;
 `;
 
-const Input = styled.input`
-    width: 100%;
-    padding: 8px;
-    margin-top: 5px;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-`;
-
 const Select = styled.select`
     width: 100%;
     padding: 8px;
@@ -212,21 +133,12 @@ const Select = styled.select`
 const Button = styled.button`
     padding: 10px 15px;
     margin: 10px 5px;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
     background: #00509E;
     color: white;
-
-    &:hover {
-        background: #007bff;
-    }
 `;
 
 const ErrorMessage = styled.p`
     color: red;
-    font-size: 14px;
-    text-align: center;
 `;
 
 export default EditProfessorModal;

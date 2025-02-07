@@ -93,7 +93,7 @@ const HeaderContainer = styled.header`
     top: 0;
     left: 0;
     width: 100vw;
-    height: 230px;
+    height: 200px;
     z-index: 1000;
     box-sizing: border-box;
     padding: 0 20px;
