@@ -1,17 +1,15 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
-// import { useAuth } from "../context/AuthContext.tsx";
 import Header from "../components/Header.tsx";
 import seta from "../assets/seta.png";
-import icon1B from "../assets/icon1B.png";
-import icon2B from "../assets/icon2B.png";
-import icon3B from "../assets/icon3B.png";
-import icon4B from "../assets/icon4B.png";
-import icon5B from "../assets/icon5B.png";
-import icon6B from "../assets/icon6B.png";
+import icon1B from "../assets/icon1b.png";
+import icon2B from "../assets/icon2b.png";
+import icon3B from "../assets/icon3b.png";
+import icon4B from "../assets/icon4b.png";
+import icon5B from "../assets/icon5b.png";
+import icon6B from "../assets/icon6b.png";
 
 const DashboardPage: React.FC = () => {
-    // const { logout } = useAuth();
     const navigate = useNavigate();
 
     return (

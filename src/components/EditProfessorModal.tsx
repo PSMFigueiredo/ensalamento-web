@@ -22,17 +22,16 @@ const EditProfessorModal = ({ professor, onClose, onConfirm }) => {
                 headers: { Authorization: `Bearer ${localStorage.getItem("token")}` }
             });
 
-            console.log("Disciplinas recebidas:", response.data); // Debug
+            console.log("Disciplinas recebidas:", response.data);
 
-            // Certifique-se de que os dados são um array antes de definir o estado
             if (Array.isArray(response.data.data)) {
                 setSelectedDisciplines(response.data.data);
             } else {
-                setSelectedDisciplines([]); // Evita erro caso não seja um array
+                setSelectedDisciplines([]);
             }
         } catch (error) {
             console.error("Erro ao carregar disciplinas:", error);
-            setSelectedDisciplines([]); // Evita erro ao tentar mapear undefined
+            setSelectedDisciplines([]);
         }
     };
 
@@ -42,16 +41,16 @@ const EditProfessorModal = ({ professor, onClose, onConfirm }) => {
                 headers: { Authorization: `Bearer ${localStorage.getItem("token")}` }
             });
 
-            console.log("Disponibilidade recebida:", response.data); // Debug
+            console.log("Disponibilidade recebida:", response.data);
 
             if (Array.isArray(response.data.data)) {
                 setAvailability(response.data.data);
             } else {
-                setAvailability([]); // Evita erro caso não seja um array
+                setAvailability([]);
             }
         } catch (error) {
             console.error("Erro ao carregar disponibilidade:", error);
-            setAvailability([]); // Evita erro ao tentar mapear undefined
+            setAvailability([]);
         }
     };
 
@@ -61,7 +60,6 @@ const EditProfessorModal = ({ professor, onClose, onConfirm }) => {
         setError("");
 
         try {
-            // Atualiza professor
             await axios.put(
                 `http://localhost:3000/professors/${professor.id}`,
                 {
@@ -72,7 +70,6 @@ const EditProfessorModal = ({ professor, onClose, onConfirm }) => {
                 { headers: { Authorization: `Bearer ${localStorage.getItem("token")}` } }
             );
 
-            // Atualiza disponibilidade do professor (cada item individualmente)
             await Promise.all(
                 availability.map((disponibilidade) =>
                     axios.put(
@@ -83,8 +80,6 @@ const EditProfessorModal = ({ professor, onClose, onConfirm }) => {
                 )
             );
 
-
-            // Atualiza disciplinas do professor (enviando corretamente como array)
             await axios.put(
                 `http://localhost:3000/disciplinas-professores/${professor.id}`,
                 {
@@ -94,7 +89,7 @@ const EditProfessorModal = ({ professor, onClose, onConfirm }) => {
                 { headers: { Authorization: `Bearer ${localStorage.getItem("token")}` } }
             );
 
-            onConfirm(); // Atualiza a página
+            onConfirm();
         } catch (error) {
             console.error("Erro ao atualizar professor:", error);
             setError("Erro ao atualizar professor.");
@@ -170,7 +165,7 @@ const EditProfessorModal = ({ professor, onClose, onConfirm }) => {
     );
 };
 
-// Estilos
+
 const ModalOverlay = styled.div`
     position: fixed;
     top: 0;
@@ -181,6 +176,7 @@ const ModalOverlay = styled.div`
     display: flex;
     justify-content: center;
     align-items: center;
+    border-top: 200px;
 `;
 
 const ModalContent = styled.div`

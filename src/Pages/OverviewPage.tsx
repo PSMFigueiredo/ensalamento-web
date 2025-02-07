@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import styled from "styled-components";
 import { FaEdit, FaTrash } from "react-icons/fa";
-import EditProfessorModal from "../components/EditProfessorModal"; // Importando a modal
+import EditProfessorModal from "../components/EditProfessorModal";
 import Header from "../components/Header";
 
 const OverviewPage: React.FC = () => {
@@ -19,10 +19,35 @@ const OverviewPage: React.FC = () => {
 
     const fetchProfessors = async () => {
         try {
-            const response = await axios.get("http://localhost:3000/professors", {
+            const responseProfessors = await axios.get("http://localhost:3000/professors", {
                 headers: { Authorization: `Bearer ${localStorage.getItem("token")}` }
             });
-            setProfessors(response.data.data.professores);
+
+            const responseDisciplines = await axios.get("http://localhost:3000/disciplinas-professores", {
+                headers: { Authorization: `Bearer ${localStorage.getItem("token")}` }
+            });
+
+            console.log("Professores da API:", responseProfessors.data);
+            console.log("Disciplinas-Professores da API:", responseDisciplines.data);
+
+            const professoresMap = responseProfessors.data.data.professores.reduce((acc, professor) => {
+                acc[professor.id] = {
+                    id: professor.id,
+                    nome: professor.nome,
+                    disciplinas: [],
+                    turmas: []
+                };
+                return acc;
+            }, {});
+
+            responseDisciplines.data.data.disciplinasProfessores.forEach(dp => {
+                if (professoresMap[dp.professorId]) {
+                    if (dp.disciplinaNome) professoresMap[dp.professorId].disciplinas.push(dp.disciplinaNome);
+                    if (dp.turmaNome) professoresMap[dp.professorId].turmas.push(dp.turmaNome);
+                }
+            });
+
+            setProfessors(Object.values(professoresMap));
             setLoading(false);
         } catch (error) {
             console.error("Erro ao buscar professores:", error);
@@ -64,25 +89,25 @@ const OverviewPage: React.FC = () => {
             ) : (
                 <Table>
                     <thead>
-                        <tr>
-                            <th>Nome</th>
-                            <th>Disciplinas</th>
-                            <th>Turmas</th>
-                            <th>Ações</th>
-                        </tr>
+                    <tr>
+                        <th>Nome</th>
+                        <th>Disciplinas</th>
+                        <th>Turmas</th>
+                        <th>Ações</th>
+                    </tr>
                     </thead>
                     <tbody>
-                        {professors.map((professor) => (
-                            <tr key={professor.id}>
-                                <td>{professor.nome}</td>
-                                <td>{professor.disciplinas?.join(", ") || "Nenhuma"}</td>
-                                <td>{professor.turmas?.join(", ") || "Nenhuma"}</td>
-                                <td>
-                                    <EditIcon onClick={() => handleEdit(professor)} />
-                                    <DeleteIcon onClick={() => handleDelete(professor.id)} />
-                                </td>
-                            </tr>
-                        ))}
+                    {professors.map((professor) => (
+                        <tr key={professor.id}>
+                            <td>{professor.nome}</td>
+                            <td>{professor.disciplinas.length > 0 ? professor.disciplinas.join(", ") : "Nenhuma"}</td>
+                            <td>{professor.turmas.length > 0 ? professor.turmas.join(", ") : "Nenhuma"}</td>
+                            <td>
+                                <EditIcon onClick={() => handleEdit(professor)} />
+                                <DeleteIcon onClick={() => handleDelete(professor.id)} />
+                            </td>
+                        </tr>
+                    ))}
                     </tbody>
                 </Table>
             )}

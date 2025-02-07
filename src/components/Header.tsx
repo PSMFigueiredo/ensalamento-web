@@ -10,7 +10,7 @@ const Header: React.FC = () => {
     const [loginText, setLoginText] = useState("Login");
     const { isAuthenticated, logout } = useAuth();
     const [isLoginPage, setIsLoginPage] = useState(false);
-    const [menuOpen, setMenuOpen] = useState(false); // Controle de abertura do menu
+    const [menuOpen, setMenuOpen] = useState(false);
     const [authStatus, setAuthStatus] = useState(isAuthenticated);
 
     useEffect(() => {
@@ -33,18 +33,18 @@ const Header: React.FC = () => {
     }, [isAuthenticated]);
 
     const handleHamburgerClick = () => {
-        setMenuOpen(!menuOpen); // Alternar entre aberto e fechado
+        setMenuOpen(!menuOpen);
     };
 
     const handleNavigate = (path: string) => {
         navigate(path);
-        setMenuOpen(false); // Fechar o menu após a navegação
+        setMenuOpen(false);
     };
 
     const handleLogout = async () => {
-        await logout(); // Chama a função de logout
-        setAuthStatus(false); // Atualiza manualmente o estado de autenticação
-        navigate("/login"); // Redireciona para a página de login após o logout
+        await logout();
+        setAuthStatus(false);
+        navigate("/login");
     };
 
     return (
@@ -58,7 +58,7 @@ const Header: React.FC = () => {
                         <LoginLink href="/login">{loginText}</LoginLink>
                         <RightLinks>
                             <ForgotPassword href="/forgot-password">Esqueci a senha</ForgotPassword>
-                            <Register href="#" onClick={() => navigate("/register-user")}>|&nbsp;&nbsp;&nbsp;&nbsp;Cadastrar Usuário</Register>
+                            <Register href="#" onClick={() => navigate("/register")}>|&nbsp;&nbsp;&nbsp;&nbsp;Cadastrar Usuário</Register>
                         </RightLinks>
                     </>
                 ) : (
@@ -187,7 +187,7 @@ const HamburgerMenuOption = styled.a`
     }
 
     &:hover {
-        background-color: #8F9BB3; /* Cor de fundo ao passar o mouse */
+        background-color: #8F9BB3; 
     }
 `;
 
