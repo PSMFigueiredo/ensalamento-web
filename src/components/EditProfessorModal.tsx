@@ -46,19 +46,22 @@ const EditProfessorModal = ({ professor, onClose, onConfirm }) => {
         setLoading(true);
         setError("");
 
-        const payload = {
-            disciplinaIds: selectedDisciplines, // Garantindo que seja um array
-            professorId: professor.id
-        };
-
-        console.log("Enviando dados para API:", payload);
 
         try {
-            await axios.put(
-                `http://localhost:3000/disciplinas-professores/${professor.id}`,
-                payload,
-                { headers: { Authorization: `Bearer ${localStorage.getItem("token")}` } }
-            );
+            for (const disciplinaId of selectedDisciplines) {
+                const payload = {
+                    disciplinaId: disciplinaId,
+                    professorId: professor.id
+                };
+                console.clear();
+                console.log(availableDisciplines);
+
+                await axios.put(
+                    `http://localhost:3000/disciplinas-professores/${2}`,
+                    payload,
+                    { headers: { Authorization: `Bearer ${localStorage.getItem("token")}` } }
+                );
+            }
 
             onConfirm();
         } catch (error) {

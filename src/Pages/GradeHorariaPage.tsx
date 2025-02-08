@@ -19,10 +19,10 @@ const GridPage: React.FC = () => {
                 headers: { Authorization: `Bearer ${localStorage.getItem("token")}` }
             });
 
-            console.log("Resposta da API:", response.data); // Adicionando para verificar estrutura
+            console.log("Resposta da API:", response.data);
 
             if (response.data && typeof response.data === "object") {
-                setGrade(response.data);
+                setGrade(response.data.grade);
             } else {
                 setError("Formato de resposta inesperado da API.");
             }
@@ -53,7 +53,7 @@ const GridPage: React.FC = () => {
                     {Array.from({ length: 6 }).map((_, i) => (
                         <tr key={i}>
                             <td>{i + 1}º Horário</td>
-                            {["Segunda", "Terça", "Quarta", "Quinta", "Sexta"].map((dia) => (
+                            {["Segunda-feira", "Terça-feira", "Quarta-feira", "Quinta-feira", "Sexta-feira"].map((dia) => (
                                 <td key={dia}>
                                     <span>{grade?.[dia]?.[i]?.disciplina || "Sem disciplina"}</span>
                                     <br />
